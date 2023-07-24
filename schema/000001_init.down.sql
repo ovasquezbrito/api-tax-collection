@@ -1,0 +1,14 @@
+DROP TABLE inventarios;
+DROP TABLE products;
+DROP TABLE unidad_medidas;
+DROP TABLE categories;
+DROP TABLE donacione_detalle;
+DROP TABLE donaciones;
+DROP TABLE donacione_tipos;
+DROP TABLE solicitud_tipos;
+DROP TABLE beneficiarios;
+DROP TABLE users;
+DROP TABLE institutos;
+DROP TABLE parroquias;
+DROP TABLE municipios;
+DROP TABLE schema_migrations;

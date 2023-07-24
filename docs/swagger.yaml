@@ -1,0 +1,223 @@
+basePath: /
+definitions:
+  handler.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  handler.getAllInstitutosResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/stopapp.Instituto'
+        type: array
+    type: object
+  handler.signInInput:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  stopapp.Instituto:
+    properties:
+      name:
+        type: string
+      id:
+        type: iteger
+      abrevia:
+        type: string
+    required:
+    - name
+    - abrevia
+    type: object
+  stopapp.User:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+      email:
+        type: string
+      phone:
+        type: string
+      instituto:
+        type: integer
+    required:
+    - name
+    - password
+    - username
+    - email
+    - phone
+    - instituto
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server el registro de stop
+  title: App de stop
+  version: "1.0"
+paths:
+  /api/institutos
+    get:
+      consumes:
+      - application/json
+      description: Get all institutos
+      operationId: get-all-institutos
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.getAllInstitutosResponse'
+        "400":
+          description: Bad Request
+          schema: 
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Bad Request
+          schema: 
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema: 
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      sumary: Get All Institutos
+      tags:
+      - institutos
+    post:
+      consumes:
+      - application/json
+      description: create institutos
+      operationId: create-instituto
+      parameters:
+      - description: instituto info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/stopapp.Instituto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema: 
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Bad Request
+          schema: 
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema: 
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      sumary: Create Instituto
+      tags:
+      - institutos
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: login
+      operationId: login
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.signInInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: SignIn
+      tags:
+      - auth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: create account
+      operationId: create-account
+      parameters:
+      - description: account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/stopapp.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: SignUp
+      tags:
+      - auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
