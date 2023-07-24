@@ -10,12 +10,12 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 
-	baseapp "github.com/ovasquezbrito/base-app"
-	"github.com/ovasquezbrito/base-app/pkg/handler"
-	"github.com/ovasquezbrito/base-app/pkg/repository"
-	"github.com/ovasquezbrito/base-app/pkg/service"
-	"github.com/ovasquezbrito/base-app/token"
-	"github.com/ovasquezbrito/base-app/util"
+	baseapp "github.com/ovasquezbrito/tax-collection"
+	"github.com/ovasquezbrito/tax-collection/pkg/handler"
+	"github.com/ovasquezbrito/tax-collection/pkg/repository"
+	"github.com/ovasquezbrito/tax-collection/pkg/service"
+	"github.com/ovasquezbrito/tax-collection/token"
+	"github.com/ovasquezbrito/tax-collection/util"
 )
 
 // @title App Base

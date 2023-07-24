@@ -1,11 +1,11 @@
-package baseapp
+package models
 
 import "strings"
 
 type QueryParameter struct {
-	Page   int
-	Limit  int
-	Search string
+	Page   int    `json:"page"`
+	Limit  int    `json:"limit"`
+	Search string `json:"search"`
 }
 
 func (i QueryParameter) UpperCase() *QueryParameter {

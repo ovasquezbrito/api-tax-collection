@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jmoiron/sqlx"
-	baseapp "github.com/ovasquezbrito/base-app"
+	baseapp "github.com/ovasquezbrito/tax-collection"
 )
 
 type RolePostgres struct {

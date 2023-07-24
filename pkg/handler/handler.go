@@ -5,13 +5,13 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/ovasquezbrito/base-app/pkg/service"
-	"github.com/ovasquezbrito/base-app/token"
+	"github.com/ovasquezbrito/tax-collection/pkg/service"
+	"github.com/ovasquezbrito/tax-collection/token"
 
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	_ "github.com/ovasquezbrito/base-app/docs"
+	_ "github.com/ovasquezbrito/tax-collection/docs"
 )
 
 type Handler struct {

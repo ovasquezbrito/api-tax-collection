@@ -1,8 +1,9 @@
 package service
 
 import (
-	baseapp "github.com/ovasquezbrito/base-app"
-	"github.com/ovasquezbrito/base-app/pkg/repository"
+	
+	"github.com/ovasquezbrito/tax-collection/pkg/models"
+	"github.com/ovasquezbrito/tax-collection/pkg/repository"
 )
 
 type RolesService struct {
@@ -13,11 +14,11 @@ func NewRoleService(repo repository.RoleRepository) *RolesService {
 	return &RolesService{repo: repo}
 }
 
-func (s *RolesService) GetAll(query baseapp.QueryParameter) ([]baseapp.Role, int, error) {
+func (s *RolesService) GetAll(query models.QueryParameter) ([]models.Role, int, error) {
 	queryUpper := query.UpperCase()
 	return s.repo.GetAll(*queryUpper)
 }
 
-func (s *RolesService) GetById(idRol int) (baseapp.Role, error) {
+func (s *RolesService) GetById(idRol int) (models.Role, error) {
 	return s.repo.GetById(idRol)
 }

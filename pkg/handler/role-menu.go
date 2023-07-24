@@ -5,12 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	baseapp "github.com/ovasquezbrito/base-app"
 )
-
-type getAllRolesMenuResponse struct {
-	Data []baseapp.RoleUser `json:"data"`
-}
 
 func (h *Handler) getAllMenuRoleUserById(c *gin.Context) {
 	_, err := getUserId(c)

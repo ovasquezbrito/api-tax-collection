@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ovasquezbrito/base-app/util"
+	"github.com/ovasquezbrito/tax-collection/util"
 	"github.com/stretchr/testify/require"
 )
 

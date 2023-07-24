@@ -1,26 +1,26 @@
 package service
 
 import (
-	baseapp "github.com/ovasquezbrito/base-app"
-	"github.com/ovasquezbrito/base-app/pkg/repository"
-	"github.com/ovasquezbrito/base-app/token"
-	"github.com/ovasquezbrito/base-app/util"
+	"github.com/ovasquezbrito/tax-collection/pkg/models"
+	"github.com/ovasquezbrito/tax-collection/pkg/repository"
+	"github.com/ovasquezbrito/tax-collection/token"
+	"github.com/ovasquezbrito/tax-collection/util"
 )
 
 type Authorization interface {
-	CreateUser(user baseapp.User) (int, error)
-	LoginUser(email, password string) (loginUserResponse, error)
-	UpdateUser(idUser int, user baseapp.User) (int, error)
-	GetUserById(idUser int) (baseapp.User, error)
+	CreateUser(user models.User) (int, error)
+	LoginUser(email, password string) (models.LoginUserResponse, error)
+	UpdateUser(idUser int, user models.User) (int, error)
+	GetUserById(idUser int) (models.User, error)
 	GetUserByUserName(email string) (int, error)
 	ParseToken(token string) (string, error)
 	VerifyToken(accessToken string) (*token.Payload, error)
-	GetMenuOptionAll(IdUser int) ([]baseapp.RoleUser, error)
+	GetMenuOptionAll(IdUser int) ([]models.RoleUser, error)
 }
 
 type RoleService interface {
-	GetAll(query baseapp.QueryParameter) ([]baseapp.Role, int, error)
-	GetById(idRol int) (baseapp.Role, error)
+	GetAll(query models.QueryParameter) ([]models.Role, int, error)
+	GetById(idRol int) (models.Role, error)
 }
 
 type Service struct {

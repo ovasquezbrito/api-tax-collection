@@ -8,8 +8,9 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	baseapp "github.com/ovasquezbrito/base-app"
-	"github.com/ovasquezbrito/base-app/token"
+
+	"github.com/ovasquezbrito/tax-collection/pkg/handler/dtos"
+	"github.com/ovasquezbrito/tax-collection/token"
 )
 
 const (
@@ -66,8 +67,8 @@ func getUserId(c *gin.Context) (string, error) {
 	return authPayload.Email, nil
 }
 
-func getPageLimitSearch(c *gin.Context) (baseapp.QueryParameter, error) {
-	var query baseapp.QueryParameter
+func getPageLimitSearch(c *gin.Context) (dtos.QueryParameter, error) {
+	var query dtos.QueryParameter
 
 	limit := c.Query("_limit")
 	page := c.Query("_page")

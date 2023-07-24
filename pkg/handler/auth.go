@@ -4,7 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	baseapp "github.com/ovasquezbrito/base-app"
+
+	"github.com/ovasquezbrito/tax-collection/pkg/handler/dtos"
 )
 
 // @Summary SignUp
@@ -20,25 +21,8 @@ import (
 // @Failure default {object} errorResponse
 // @Router /auth/sign-up [post]
 
-type signInInputUser struct {
-	Email    string `json:"email" binding:"required"`
-	Password string `json:"password" binding:"required"`
-}
-
-type UserResponse struct {
-	ID     int    `json:"id"`
-	Email  string `json:"email"`
-	Name   string `json:"name"`
-	UriImg string `json:"uri_img"`
-	Token  string `json:"token"`
-}
-
-type tokenUser struct {
-	Token string `json:"token" binding:"required"`
-}
-
 func (h *Handler) register(c *gin.Context) {
-	var input baseapp.User
+	var input dtos.RegisterUser
 
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
@@ -64,7 +48,7 @@ func (h *Handler) register(c *gin.Context) {
 }
 
 func (h *Handler) login(c *gin.Context) {
-	var input signInInputUser
+	var input dtos.LoginUser
 
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
@@ -76,7 +60,7 @@ func (h *Handler) login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, UserResponse{
+	c.JSON(http.StatusOK, dtos.UserResponse{
 		ID:     data.UserLogin.Id,
 		Email:  data.UserLogin.Email,
 		Name:   data.UserLogin.FirstLast,
@@ -87,7 +71,7 @@ func (h *Handler) login(c *gin.Context) {
 }
 
 func (h *Handler) verifyToken(c *gin.Context) {
-	var input tokenUser
+	var input dtos.TokenUser
 
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())

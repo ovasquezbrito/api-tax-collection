@@ -6,10 +6,10 @@ import (
 	"strings"
 	"time"
 
-	baseapp "github.com/ovasquezbrito/base-app"
-	"github.com/ovasquezbrito/base-app/pkg/repository"
-	"github.com/ovasquezbrito/base-app/token"
-	"github.com/ovasquezbrito/base-app/util"
+	"github.com/ovasquezbrito/tax-collection/pkg/models"
+	"github.com/ovasquezbrito/tax-collection/pkg/repository"
+	"github.com/ovasquezbrito/tax-collection/token"
+	"github.com/ovasquezbrito/tax-collection/util"
 )
 
 const (
@@ -23,16 +23,12 @@ type AuthService struct {
 	tokenMaker token.Maker
 	config     util.Config
 }
-type loginUserResponse struct {
-	AccessToken string       `json:"access_"`
-	UserLogin   baseapp.User `json:"user"`
-}
 
 func NewAuthService(repo repository.Authorization, tokenMaker token.Maker, config util.Config) *AuthService {
 	return &AuthService{repo: repo, tokenMaker: tokenMaker, config: config}
 }
 
-func (s *AuthService) CreateUser(user baseapp.User) (int, error) {
+func (s *AuthService) CreateUser(user models.User) (int, error) {
 	hashedPassword, err := util.HashPassword(user.Password)
 	if err != nil {
 		return 0, errors.New("invalid signing method")
@@ -43,7 +39,7 @@ func (s *AuthService) CreateUser(user baseapp.User) (int, error) {
 	return s.repo.CreateUser(*input)
 }
 
-func (s *AuthService) UpdateUser(idUser int, user baseapp.User) (int, error) {
+func (s *AuthService) UpdateUser(idUser int, user models.User) (int, error) {
 	hashedPassword, err := util.HashPassword(user.Password)
 	if err != nil {
 		return 0, errors.New("invalid signing method")
@@ -53,7 +49,7 @@ func (s *AuthService) UpdateUser(idUser int, user baseapp.User) (int, error) {
 	return s.repo.UpdateUser(idUser, *input)
 }
 
-func (s *AuthService) GetUserById(IdUser int) (baseapp.User, error) {
+func (s *AuthService) GetUserById(IdUser int) (models.User, error) {
 	return s.repo.GetUserById(IdUser)
 }
 
@@ -61,28 +57,28 @@ func (s *AuthService) GetUserByUserName(email string) (int, error) {
 	return s.repo.GetUserByUserName(strings.ToLower(email))
 }
 
-func (s *AuthService) GetMenuOptionAll(idUser int) ([]baseapp.RoleUser, error) {
+func (s *AuthService) GetMenuOptionAll(idUser int) ([]models.RoleUser, error) {
 	return s.repo.GetMenuOptionAll(idUser)
 }
 
-func (s *AuthService) LoginUser(email, password string) (loginUserResponse, error) {
+func (s *AuthService) LoginUser(email, password string) (models.LoginUserResponse, error) {
 
 	user, err := s.repo.GetUserByUserEmail(strings.ToLower(email))
 	if err != nil {
-		return loginUserResponse{}, err
+		return models.LoginUserResponse{}, err
 	}
 
 	err = util.CheckPassword(password, user.Password)
 	if err != nil {
-		return loginUserResponse{}, err
+		return models.LoginUserResponse{}, err
 	}
 
 	fmt.Println(s.config.AccessTokenDuration)
 	token, err := s.tokenMaker.CreateToken(email, s.config.AccessTokenDuration)
 	if err != nil {
-		return loginUserResponse{}, errors.New("No se pudo generar el token")
+		return models.LoginUserResponse{}, errors.New("No se pudo generar el token")
 	}
-	return loginUserResponse{
+	return models.LoginUserResponse{
 		UserLogin:   user,
 		AccessToken: token,
 	}, nil

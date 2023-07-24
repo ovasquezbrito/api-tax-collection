@@ -1,1 +1,1 @@
-Sistema de stop  de inventarios
+Sistema de Registro y Control de Recaudación de Impuestos

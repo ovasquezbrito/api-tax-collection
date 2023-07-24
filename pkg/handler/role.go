@@ -5,13 +5,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	stopapp "github.com/ovasquezbrito/base-app"
+	"github.com/ovasquezbrito/tax-collection/pkg/handler/dtos"
 )
-
-type getAllRolesResponse struct {
-	Data  []stopapp.Role `json:"data"`
-	Total int            `json:"totalCount"`
-}
 
 func (h *Handler) getAllRoles(c *gin.Context) {
 	_, err := getUserId(c)
@@ -32,7 +27,7 @@ func (h *Handler) getAllRoles(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, getAllRolesResponse{
+	c.JSON(http.StatusOK, dtos.GetAllRolesResponse{
 		Data:  lists,
 		Total: total,
 	})

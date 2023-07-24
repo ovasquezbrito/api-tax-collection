@@ -1,4 +1,4 @@
-package baseapp
+package entity
 
 import (
 	"time"
