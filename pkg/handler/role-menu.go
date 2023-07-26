@@ -20,7 +20,7 @@ func (h *Handler) getAllMenuRoleUserById(c *gin.Context) {
 		return
 	}
 
-	user, err := h.services.Authorization.GetMenuOptionAll(id)
+	user, err := h.services.Authorization.GetMenuOptionAll(c, id)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

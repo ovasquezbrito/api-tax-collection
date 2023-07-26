@@ -9,7 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/ovasquezbrito/tax-collection/pkg/handler/dtos"
+	"github.com/ovasquezbrito/tax-collection/pkg/models"
 	"github.com/ovasquezbrito/tax-collection/token"
 )
 
@@ -67,8 +67,8 @@ func getUserId(c *gin.Context) (string, error) {
 	return authPayload.Email, nil
 }
 
-func getPageLimitSearch(c *gin.Context) (dtos.QueryParameter, error) {
-	var query dtos.QueryParameter
+func getPageLimitSearch(c *gin.Context) (models.QueryParameter, error) {
+	var query models.QueryParameter
 
 	limit := c.Query("_limit")
 	page := c.Query("_page")

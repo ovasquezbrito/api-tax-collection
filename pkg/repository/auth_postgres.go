@@ -1,11 +1,12 @@
 package repository
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
 	"github.com/jmoiron/sqlx"
-	baseapp "github.com/ovasquezbrito/tax-collection"
+	"github.com/ovasquezbrito/tax-collection/pkg/entity"
 )
 
 type AuthPostgres struct {
@@ -16,7 +17,7 @@ func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
 	return &AuthPostgres{db: db}
 }
 
-func (r *AuthPostgres) CreateUser(user baseapp.User) (int, error) {
+func (r *AuthPostgres) CreateUser(ctx context.Context, user entity.User) (int, error) {
 	var id int
 	query := fmt.Sprintf(
 		`
@@ -44,8 +45,8 @@ func (r *AuthPostgres) CreateUser(user baseapp.User) (int, error) {
 	return id, nil
 }
 
-func (r *AuthPostgres) GetUser(email, password string) (baseapp.User, error) {
-	var user baseapp.User
+func (r *AuthPostgres) GetUser(ctx context.Context, email, password string) (entity.User, error) {
+	var user entity.User
 	query := fmt.Sprintf(
 		`
 		SELECT us.id, us.first_last as name, us.email, us.password, us.uri_img 
@@ -63,7 +64,7 @@ func (r *AuthPostgres) GetUser(email, password string) (baseapp.User, error) {
 	return user, nil
 }
 
-func (r *AuthPostgres) UpdateUser(idUser int, user baseapp.User) (int, error) {
+func (r *AuthPostgres) UpdateUser(ctx context.Context, idUser int, user entity.User) (int, error) {
 	var id int
 	query := fmt.Sprintf(
 		`
@@ -92,8 +93,8 @@ func (r *AuthPostgres) UpdateUser(idUser int, user baseapp.User) (int, error) {
 	return id, nil
 }
 
-func (r *AuthPostgres) GetUserById(idUser int) (baseapp.User, error) {
-	var user baseapp.User
+func (r *AuthPostgres) GetUserById(ctx context.Context, idUser int) (*entity.User, error) {
+	u := &entity.User{}
 	query := fmt.Sprintf(
 		`
 			SELECT us.id, us.first_last as name, us.email, us.username, us.password, us.uri_img
@@ -103,15 +104,15 @@ func (r *AuthPostgres) GetUserById(idUser int) (baseapp.User, error) {
 		usersTable,
 	)
 
-	err := r.db.Get(&user, query, idUser)
+	err := r.db.Get(&u, query, idUser)
 	if err != nil {
-		return user, err //errors.New("error al realizar la consulta")
+		return u, err //errors.New("error al realizar la consulta")
 	}
-	return user, nil
+	return u, nil
 }
 
-func (r *AuthPostgres) GetUserByUserName(email string) (int, error) {
-	var user baseapp.User
+func (r *AuthPostgres) GetUserByUserName(ctx context.Context, email string) (int, error) {
+	var user entity.User
 	query := fmt.Sprintf(
 		`
 			SELECT us.first_last as name, us.email, us.password, us.uri_img
@@ -128,8 +129,8 @@ func (r *AuthPostgres) GetUserByUserName(email string) (int, error) {
 	return 1, errors.New("ya existe un usuario con este nombre")
 }
 
-func (r *AuthPostgres) GetUserByUserEmail(email string) (baseapp.User, error) {
-	var user baseapp.User
+func (r *AuthPostgres) GetUserByUserEmail(ctx context.Context, email string) (*entity.User, error) {
+	u := &entity.User{}
 	query := fmt.Sprintf(
 		`
 			SELECT us.id, us.first_last as name, us.email, us.password, us.uri_img
@@ -139,15 +140,15 @@ func (r *AuthPostgres) GetUserByUserEmail(email string) (baseapp.User, error) {
 		usersTable,
 	)
 
-	err := r.db.Get(&user, query, email)
+	err := r.db.Get(u, query, email)
 	if err != nil {
-		return user, errors.New("no hubo resultado")
+		return u, errors.New("no hubo resultado")
 	}
-	return user, nil
+	return u, nil
 }
 
-func (r *AuthPostgres) GetMenuOptionAll(idUser int) ([]baseapp.RoleUser, error) {
-	var lists []baseapp.RoleUser
+func (r *AuthPostgres) GetMenuOptionAll(ctx context.Context, idUser int) ([]entity.RoleUser, error) {
+	var lists []entity.RoleUser
 
 	query := fmt.Sprintf(
 		`

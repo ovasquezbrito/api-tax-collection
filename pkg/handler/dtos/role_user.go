@@ -1,6 +1,10 @@
 package dtos
 
-import "time"
+import (
+	"time"
+
+	"github.com/ovasquezbrito/tax-collection/pkg/models"
+)
 
 type Role struct {
 	NameRole  string    `json:"name_role" binding:"required"`
@@ -28,6 +32,6 @@ type GetAllRolesMenuResponse struct {
 }
 
 type GetAllRolesResponse struct {
-	Data  []Role `json:"data"`
-	Total int    `json:"totalCount"`
+	Data  []models.Role `json:"data"`
+	Total int           `json:"totalCount"`
 }

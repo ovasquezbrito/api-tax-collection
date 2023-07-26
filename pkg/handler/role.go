@@ -21,7 +21,7 @@ func (h *Handler) getAllRoles(c *gin.Context) {
 		return
 	}
 
-	lists, total, err := h.services.RoleService.GetAll(query)
+	lists, total, err := h.services.RoleService.GetAll(c, query)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -46,7 +46,7 @@ func (h *Handler) getRoleById(c *gin.Context) {
 		return
 	}
 
-	item, err := h.services.RoleService.GetById(id)
+	item, err := h.services.RoleService.GetById(c, id)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

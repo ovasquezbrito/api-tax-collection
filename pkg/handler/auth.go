@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/ovasquezbrito/tax-collection/pkg/handler/dtos"
+	"github.com/ovasquezbrito/tax-collection/pkg/models"
 )
 
 // @Summary SignUp
@@ -29,14 +30,21 @@ func (h *Handler) register(c *gin.Context) {
 		return
 	}
 
-	existUserName, err := h.services.Authorization.GetUserByUserName(input.Email)
+	existUserName, err := h.services.Authorization.GetUserByUserName(c, input.Email)
 
 	if existUserName > 0 {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	id, err := h.services.Authorization.CreateUser(input)
+	dto := models.User{
+		FirstLast: input.FirstLast,
+		Email:     input.Email,
+		Password:  input.Password,
+		UriImg:    input.UriImg,
+	}
+
+	id, err := h.services.Authorization.CreateUser(c, dto)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -54,7 +62,7 @@ func (h *Handler) login(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	data, err := h.services.Authorization.LoginUser(input.Email, input.Password)
+	data, err := h.services.Authorization.LoginUser(c, input.Email, input.Password)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

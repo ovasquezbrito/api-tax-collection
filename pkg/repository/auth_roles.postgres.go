@@ -1,11 +1,12 @@
 package repository
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
 	"github.com/jmoiron/sqlx"
-	baseapp "github.com/ovasquezbrito/tax-collection"
+	"github.com/ovasquezbrito/tax-collection/pkg/entity"
 )
 
 type RolePostgres struct {
@@ -16,8 +17,8 @@ func NewRolePostgres(db *sqlx.DB) *RolePostgres {
 	return &RolePostgres{db: db}
 }
 
-func (r *RolePostgres) GetAll(queryp baseapp.QueryParameter) ([]baseapp.Role, int, error) {
-	var lists []baseapp.Role
+func (r *RolePostgres) GetAll(ctx context.Context, queryp entity.QueryParameter) ([]entity.Role, int, error) {
+	var lists []entity.Role
 	var total int
 
 	offset := (queryp.Page - 1) * queryp.Limit
@@ -45,15 +46,15 @@ func (r *RolePostgres) GetAll(queryp baseapp.QueryParameter) ([]baseapp.Role, in
 	return lists, total, nil
 }
 
-func (r *RolePostgres) GetById(idRol int) (baseapp.Role, error) {
-	var item baseapp.Role
+func (r *RolePostgres) GetById(ctx context.Context, idRol int) (*entity.Role, error) {
+	item := &entity.Role{}
 	query := fmt.Sprintf(`SELECT name_role, nivel_role 
 		FROM %s
 		WHERE id = $1`,
 		roleTable,
 	)
 
-	err := r.db.Get(&item, query, idRol)
+	err := r.db.Get(item, query, idRol)
 	if err != nil {
 		return item, errors.New("error al realizar la consulta")
 	}
