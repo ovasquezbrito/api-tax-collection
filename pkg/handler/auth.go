@@ -38,10 +38,10 @@ func (h *Handler) register(c *gin.Context) {
 	}
 
 	dto := models.User{
-		FirstLast: input.FirstLast,
-		Email:     input.Email,
-		Password:  input.Password,
-		UriImg:    input.UriImg,
+		FirstLast:  input.FirstLast,
+		Email:      input.Email,
+		Password:   input.Password,
+		AvatarUser: input.AvatarUser,
 	}
 
 	id, err := h.services.Authorization.CreateUser(c, dto)
@@ -69,11 +69,11 @@ func (h *Handler) login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, dtos.UserResponse{
-		ID:     data.UserLogin.Id,
-		Email:  data.UserLogin.Email,
-		Name:   data.UserLogin.FirstLast,
-		UriImg: data.UserLogin.UriImg,
-		Token:  data.AccessToken,
+		ID:         data.UserLogin.Id,
+		Email:      data.UserLogin.Email,
+		Name:       data.UserLogin.FirstLast,
+		AvatarUser: data.UserLogin.AvatarUser,
+		Token:      data.AccessToken,
 	})
 
 }

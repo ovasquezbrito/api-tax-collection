@@ -1,241 +1,247 @@
-CREATE TABLE users_p (
-    id serial not null unique,
-    first_last varchar(255) not null,
-    email varchar(255) not null unique,
-    password varchar(255) not null,
-    status varchar(8) not null default 'activo',
-    password_changed_at timestamptz NOT NULL DEFAULT('0001-01-01 00:00:00Z'), 
-    uri_img text, 
-    created_at timestamptz NOT NULL DEFAULT (now())
+CREATE TABLE "users" (
+  "id" bigserial PRIMARY KEY,
+  "first_last_name" varchar(200),
+  "email" varchar(100) UNIQUE NOT NULL,
+  "avatar_user" text NOT NULL,
+  "password" varchar(255) NOT NULL,
+  "status" bool NOT NULL DEFAULT true,
+  "created_at" timestamptz DEFAULT (now()),
+  "updated_at" timestamptz DEFAULT (now())
 );
 
-CREATE TABLE empresas (
-    id serial not null unique,
-    nombre_empresa varchar(255) not null unique,
-    nuemro_dni varchar(15) not null unique,
-    description text,
-    telefono_oficina varchar(50),
-    telefono_celular varchar(50),
-    uri_img text,
-    created_at TIMESTAMP default now(),
-    updated_at TIMESTAMP default now(),
-    delete_at TIMESTAMP
+CREATE TABLE "roles" (
+  "id" bigserial PRIMARY KEY,
+  "role_name" char(50) NOT NULL DEFAULT 'regular',
+  "status" bool NOT NULL DEFAULT true,
+  "created_at" timestamptz DEFAULT (now()),
+  "updated_at" timestamptz DEFAULT (now())
 );
 
-CREATE TABLE categories (
-    id serial not null unique,
-    name_category varchar(255) not null unique,
-    uri_img text,
-    status varchar(8) not null default 'activo',
-    created_at TIMESTAMP default now(),
-    updated_at TIMESTAMP default now(),
-    deleted_at TIMESTAMP
+CREATE TABLE "users_roles" (
+  "id" bigserial PRIMARY KEY,
+  "fk_user" bigint,
+  "fk_role" bigint
 );
 
-CREATE TABLE products (
-    id serial not null unique,
-    id_uuid uuid DEFAULT uuid_generate_v4 () not null unique,
-    name_product varchar(255) not null unique,
-    description text,
-    uri_img text,
-    status varchar(8) not null default 'activo',
-    created_at TIMESTAMP default now(),
-    updated_at TIMESTAMP default now(),
-    deleted_at TIMESTAMP,
-    fk_id_category int references categories (id) on delete cascade not null
+CREATE TABLE "menu_options" (
+  "id" bigserial PRIMARY KEY,
+  "label_url" char(20) NOT NULL,
+  "name_icon" char(20) NOT NULL,
+  "component_or_page_url" varchar(200) NOT NULL,
+  "address_url" varchar(200) NOT NULL,
+  "order_url" bigint NOT NULL DEFAULT 0,
+  "tipo_url" char(1) NOT NULL DEFAULT 'L',
+  "status" bool NOT NULL DEFAULT true,
+  "created_at" timestamptz DEFAULT (now()),
+  "updated_at" timestamptz DEFAULT (now())
 );
 
-CREATE TABLE unidad_medidas (
-    id serial not null unique,
-    name_unidad varchar(255) not null unique,
-    valor_unidad int,
-    status varchar(8) not null default 'activo',
-    created_at TIMESTAMP default now(),
-    updated_at TIMESTAMP default now(),
-    deleted_at TIMESTAMP
+CREATE TABLE "users_roles_menu_option" (
+  "id" bigserial PRIMARY KEY,
+  "fk_user" bigint,
+  "fk_menu_option" bigint,
+  "nivel" bigint NOT NULL DEFAULT 0
 );
 
-
-CREATE TABLE almacenes (
-    id serial not null unique,
-    id_uuid uuid DEFAULT uuid_generate_v4 () not null unique,
-    nombre_stop varchar(255) not null unique,
-    abrevia varchar(4) not null unique,
-    ubication text,
-    phone varchar(255) not null,
-    encargado_principal varchar(255) not null,
-    phone_encargado varchar(255) not null,
-    uri_img text,
-    status varchar(8) not null default 'activo',
-    created_at TIMESTAMP default now(),
-    updated_at TIMESTAMP default now(),
-    delete_at TIMESTAMP
+CREATE TABLE "companies" (
+  "id" bigserial PRIMARY KEY,
+  "name_company" varchar(150) NOT NULL,
+  "addres_company" text NOT NULL,
+  "phone_company" varchar(100) NOT NULL,
+  "liable_company" varchar(100) NOT NULL,
+  "banner_company" text NOT NULL,
+  "status" bool NOT NULL DEFAULT true,
+  "created_at" timestamptz DEFAULT (now()),
+  "updated_at" timestamptz DEFAULT (now()),
+  "deleted_at" timestamp(6)
 );
 
-CREATE TABLE roles (
-    id serial not null unique,
-    name_role varchar(10) not null unique,
-    nivel_role int default 3,
-    status varchar(8) not null default 'activo',
-    created_at TIMESTAMP default now(),
-    updated_at TIMESTAMP default now(),
-    delete_at TIMESTAMP
+CREATE TABLE "institutions" (
+  "id" bigserial PRIMARY KEY,
+  "fk_companny" bigint,
+  "name_intitution" varchar(150) NOT NULL,
+  "addres_intitution" text NOT NULL,
+  "phone_intitution" varchar(100) NOT NULL,
+  "liable_intitution" varchar(100) NOT NULL,
+  "logo_intitution" text NOT NULL,
+  "status" bool NOT NULL DEFAULT true,
+  "created_at" timestamptz DEFAULT (now()),
+  "updated_at" timestamptz DEFAULT (now()),
+  "deleted_at" timestamp(6)
 );
 
-CREATE TABLE roles_users (
-    id serial not null unique,
-    nivel_opcion int,
-    fk_id_user int references users (id) on delete cascade not null,
-    fk_menu_opcion_detalle int references menu_opcions_detalles (id) on delete cascade not null,
-    status varchar(8) not null default 'activo',
-    created_at TIMESTAMP default now(),
-    updated_at TIMESTAMP default now(),
-    delete_at TIMESTAMP
+CREATE TABLE "users_intitutions" (
+  "id" bigserial PRIMARY KEY,
+  "fk_user" bigint,
+  "fk_intitution" bigint
 );
 
-CREATE TABLE users (
-    id serial not null unique,
-    first_last varchar(255) not null,
-    username varchar(255) not null unique,
-    telefono varchar(100) not null,
-    email varchar(255) not null unique,
-    password_hash varchar(255) not null,
-    status varchar(8) not null default 'activo',
-    uri_img text,
-    fk_instituto int references institutos (id) on delete cascade not null,
-    fk_rol int references roles (id) on delete cascade not null
+CREATE TABLE "municipalities" (
+  "id" bigserial PRIMARY KEY,
+  "code_municipality" varchar(2) UNIQUE NOT NULL,
+  "name_municipality" varchar(100) UNIQUE NOT NULL
 );
 
-
-
-CREATE TABLE menu_opciones (
-  id serial not null unique,
-  name_menu varchar(50) not null unique,
-  status varchar(8) NOT NULL DEFAULT 'activo'::character varying,
-  created_at timestamp(6) DEFAULT now(),
-  updated_at timestamp(6) DEFAULT now(),
-  delete_at timestamp(6)
+CREATE TABLE "parishes" (
+  "id" bigserial PRIMARY KEY,
+  "fk_municipality" bigint,
+  "code_parish" varchar(3) UNIQUE NOT NULL,
+  "name_parish" varchar(100) UNIQUE NOT NULL
 );
 
-CREATE TABLE menu_opcions_detalles (
-  id serial not null unique,
-  name_opcion varchar(50) not null unique,
-  description varchar(250) not null,
-  icon varchar(50) not null,
-  componente_uri varchar(50) not null,
-  page_url varchar(200) not null,
-  orderby int, 
-  type_opcion varchar(1) not null DEFAULT 'L'::character varying, 
-  fk_menu_opcion int references menu_opciones (id) on delete cascade not null,
-  status varchar(8) NOT NULL DEFAULT 'activo'::character varying,
-  created_at timestamp(6) DEFAULT now(),
-  updated_at timestamp(6) DEFAULT now(),
-  delete_at timestamp(6)
+CREATE TABLE "sectors" (
+  "id" bigserial PRIMARY KEY,
+  "fk_parish" bigint,
+  "name_sector" varchar(250) NOT NULL
 );
 
-CREATE TABLE municipios (
-    id serial not null unique,
-    codigo_municipio varchar(2) not null unique,
-    nombre_municipio varchar(255) not null,
-    status varchar(8) not null default 'activo',
-    created_at TIMESTAMP default now(),
-    updated_at TIMESTAMP default now(),
-    deleted_at TIMESTAMP
-);
-CREATE TABLE parroquias (
-    id serial not null unique,
-    codigo_parroquia varchar(3) not null unique,
-    nombre_parroquia varchar(255) not null,
-    status varchar(8) not null default 'activo',
-    created_at TIMESTAMP default now(),
-    updated_at TIMESTAMP default now(),
-    deleted_at TIMESTAMP,
-    fk_codigo_municipio varchar(2) references municipios (codigo_municipio) on delete cascade not null
-);
-CREATE TABLE beneficiarios (
-    id serial not null unique,
-    cedula varchar(12) not null unique,
-    nombre_benefi varchar(255) not null,
-    fecha_nacimiento date,
-    edad int,
-    telefono varchar(50),
-    correo varchar(100),
-    direccion text,
-    status varchar(8) not null default 'activo',
-    created_at TIMESTAMP default now(),
-    updated_at TIMESTAMP default now(),
-    deleted_at TIMESTAMP,
-    fk_codigo_municipio varchar(2) references municipios (codigo_municipio) on delete cascade not null,
-    fk_codigo_parroquia varchar(3) references parroquias (codigo_parroquia) on delete cascade not null,
-    fk_user int references users (id) on delete cascade not null
+CREATE TABLE "taxpayers" (
+  "id" bigserial PRIMARY KEY,
+  "name_taxpayer" varchar(250) UNIQUE NOT NULL,
+  "dni_taxpayer" varchar(15) UNIQUE NOT NULL,
+  "address_taxpayer" text NOT NULL,
+  "email_taxpayer" varchar(100),
+  "latitud" float8,
+  "longitud" float8,
+  "liable_taxpayer" varchar(150),
+  "email_liable_taxpayer" varchar(100),
+  "status" bool NOT NULL DEFAULT true,
+  "created_at" timestamptz DEFAULT (now()),
+  "updated_at" timestamptz DEFAULT (now()),
+  "deleted_at" timestamp(6),
+  "fk_municipality" bigint,
+  "fk_parish" bigint,
+  "fk_sector" bigint,
+  "fk_user" bigint
 );
 
-
-
-CREATE TABLE inventarios (
-    id serial not null unique,
-    price float,
-    existence int,
-    stop_min int,
-    stop_max int,
-    discount varchar(1) not null default 'S',
-    status varchar(8) not null default 'activo',
-    created_at TIMESTAMP default now(),
-    updated_at TIMESTAMP default now(),
-    deleted_at TIMESTAMP,
-    fk_id_instituto int references institutos (id) on delete cascade not null,
-    fk_id_product int references products (id) on delete cascade not null,
-    fk_id_unidad_medida int references unidad_medidas (id) on delete cascade not null
+CREATE TABLE "institutions_taxpayers" (
+  "id" bigserial PRIMARY KEY,
+  "number_file" varchar(20) UNIQUE NOT NULL,
+  "fk_intitution" bigint,
+  "fk_taxpayer" bigint
 );
 
-CREATE TABLE solicitud_tipos (
-    id serial not null unique,
-    name_solicitud varchar(255) not null unique,
-    status varchar(8) not null default 'activo',
-    created_at TIMESTAMP default now(),
-    updated_at TIMESTAMP default now(),
-    deleted_at TIMESTAMP
+CREATE TABLE "payment_frequencies" (
+  "id" bigserial PRIMARY KEY,
+  "name_frequency" varchar(150) UNIQUE NOT NULL,
+  "value_frequency" int8 NOT NULL DEFAULT 1
 );
 
-CREATE TABLE donacione_tipos (
-    id serial not null unique,
-    nombre_tipo varchar(255) not null unique,
-    tipo varchar(20) not null,
-    descripcion text,
-    fk_id_solicitud_tipo int references solicitud_tipos (id) on delete cascade not null,
-    status varchar(8) not null default 'activo',
-    created_at TIMESTAMP default now(),
-    updated_at TIMESTAMP default now(),
-    deleted_at TIMESTAMP
+CREATE TABLE "payment_concepts" (
+  "id" bigserial PRIMARY KEY,
+  "name_payment_concept" varchar(150) UNIQUE NOT NULL,
+  "formula" text NOT NULL,
+  "fk_payment_frequency" bigint
 );
 
-CREATE TABLE donaciones (
-    id serial not null unique,
-    numero_solicitud varchar(15) not null unique,
-    fecha_solicitud date not null,
-    nombre_centro varchar(255),
-    medico_tratante varchar(255),
-    observacion text,
-    enlace_politico varchar(255),
-    remitido varchar(255),
-    responsable varchar(255),
-    fecha_entrega date,
-    status varchar(10) not null default 'pendiente',
-    created_at TIMESTAMP default now(),
-    updated_at TIMESTAMP default now(),
-    deleted_at TIMESTAMP,
-    fk_benefici varchar(12) references beneficiarios (cedula) on delete cascade not null,
-    fk_instituto int references institutos (id) on delete cascade not null,
-    fk_donacione_tipo int references donacione_tipos (id) on delete cascade not null,
-    fk_user int references users (id) on delete cascade not null
+CREATE TABLE "institutions_taxpayers_conceptos" (
+  "id" bigserial PRIMARY KEY,
+  "fk_institutions_taxpayers" bigint,
+  "fk_payment_concept" bigint
 );
-CREATE TABLE donacione_detalle (
-    id serial not null unique,
-    cantidad int,
-    descripcion varchar(255),
-    fk_numero_solicitud varchar(15) references donaciones (numero_solicitud) on delete cascade not null,
-    fk_id_inventario int references inventarios (id) on delete cascade not null,
-    created_at TIMESTAMP default now(),
-    updated_at TIMESTAMP default now(),
-    delete_at TIMESTAMP
+
+CREATE TABLE "payments" (
+  "id" bigserial PRIMARY KEY,
+  "payment_date" date NOT NULL,
+  "amount_payment" float8 NOT NULL DEFAULT 0,
+  "fk_institutions_taxpayers" bigint,
+  "observation" text,
+  "status" bool NOT NULL DEFAULT true,
+  "created_at" timestamptz DEFAULT (now()),
+  "updated_at" timestamptz DEFAULT (now()),
+  "deleted_at" timestamp(6)
 );
+
+CREATE TABLE "payments_details" (
+  "id" bigserial PRIMARY KEY,
+  "fk_payment" bigint,
+  "fk_institutions_taxpayers_concept" bigint,
+  "amount_details" float8 NOT NULL DEFAULT 0
+);
+
+CREATE INDEX ON "users" ("email");
+
+CREATE INDEX ON "roles" ("role_name");
+
+CREATE INDEX ON "users_roles" ("fk_user");
+
+CREATE INDEX ON "users_roles" ("fk_role");
+
+CREATE INDEX ON "menu_options" ("component_or_page_url");
+
+CREATE INDEX ON "menu_options" ("address_url");
+
+CREATE INDEX ON "users_roles_menu_option" ("fk_user");
+
+CREATE INDEX ON "users_roles_menu_option" ("fk_menu_option");
+
+CREATE INDEX ON "companies" ("name_company");
+
+CREATE INDEX ON "municipalities" ("code_municipality");
+
+CREATE INDEX ON "municipalities" ("name_municipality");
+
+CREATE INDEX ON "parishes" ("code_parish");
+
+CREATE INDEX ON "parishes" ("name_parish");
+
+CREATE INDEX ON "taxpayers" ("name_taxpayer");
+
+CREATE INDEX ON "taxpayers" ("dni_taxpayer");
+
+CREATE INDEX ON "institutions_taxpayers" ("number_file");
+
+CREATE INDEX ON "payment_frequencies" ("name_frequency");
+
+CREATE INDEX ON "payment_concepts" ("name_payment_concept");
+
+COMMENT ON COLUMN "companies"."liable_company" IS 'responsable de la empresa';
+
+COMMENT ON COLUMN "institutions"."liable_intitution" IS 'responsable de la empresa';
+
+COMMENT ON COLUMN "taxpayers"."liable_taxpayer" IS 'Responsable';
+
+COMMENT ON COLUMN "taxpayers"."email_liable_taxpayer" IS 'Email del responsable';
+
+ALTER TABLE "users_roles" ADD FOREIGN KEY ("fk_user") REFERENCES "users" ("id");
+
+ALTER TABLE "users_roles" ADD FOREIGN KEY ("fk_role") REFERENCES "roles" ("id");
+
+ALTER TABLE "users_roles_menu_option" ADD FOREIGN KEY ("fk_user") REFERENCES "users" ("id");
+
+ALTER TABLE "users_roles_menu_option" ADD FOREIGN KEY ("fk_menu_option") REFERENCES "menu_options" ("id");
+
+ALTER TABLE "institutions" ADD FOREIGN KEY ("fk_companny") REFERENCES "companies" ("id");
+
+ALTER TABLE "users_intitutions" ADD FOREIGN KEY ("fk_user") REFERENCES "users" ("id");
+
+ALTER TABLE "users_intitutions" ADD FOREIGN KEY ("fk_intitution") REFERENCES "institutions" ("id");
+
+ALTER TABLE "parishes" ADD FOREIGN KEY ("fk_municipality") REFERENCES "municipalities" ("id");
+
+ALTER TABLE "sectors" ADD FOREIGN KEY ("fk_parish") REFERENCES "parishes" ("id");
+
+ALTER TABLE "taxpayers" ADD FOREIGN KEY ("fk_municipality") REFERENCES "municipalities" ("id");
+
+ALTER TABLE "taxpayers" ADD FOREIGN KEY ("fk_parish") REFERENCES "parishes" ("id");
+
+ALTER TABLE "taxpayers" ADD FOREIGN KEY ("fk_sector") REFERENCES "sectors" ("id");
+
+ALTER TABLE "taxpayers" ADD FOREIGN KEY ("fk_user") REFERENCES "users" ("id");
+
+ALTER TABLE "institutions_taxpayers" ADD FOREIGN KEY ("fk_intitution") REFERENCES "institutions" ("id");
+
+ALTER TABLE "institutions_taxpayers" ADD FOREIGN KEY ("fk_taxpayer") REFERENCES "taxpayers" ("id");
+
+ALTER TABLE "payment_concepts" ADD FOREIGN KEY ("fk_payment_frequency") REFERENCES "payment_frequencies" ("id");
+
+ALTER TABLE "institutions_taxpayers_conceptos" ADD FOREIGN KEY ("fk_institutions_taxpayers") REFERENCES "institutions_taxpayers" ("id");
+
+ALTER TABLE "institutions_taxpayers_conceptos" ADD FOREIGN KEY ("fk_payment_concept") REFERENCES "payment_concepts" ("id");
+
+ALTER TABLE "payments" ADD FOREIGN KEY ("fk_institutions_taxpayers") REFERENCES "institutions_taxpayers" ("id");
+
+ALTER TABLE "payments_details" ADD FOREIGN KEY ("fk_payment") REFERENCES "payments" ("id");
+
+ALTER TABLE "payments_details" ADD FOREIGN KEY ("fk_institutions_taxpayers_concept") REFERENCES "institutions_taxpayers_conceptos" ("id");

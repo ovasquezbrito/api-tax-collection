@@ -9,11 +9,10 @@ type UserRole struct {
 
 type Role struct {
 	IdRole    int       `json:"id_role"`
-	NameRole  string    `json:"name_role" binding:"required"`
-	NivelRole int       `json:"nivel_role" binding:"required"`
+	RoleName  string    `json:"role_name" binding:"required"`
+	Status    bool      `json:"status"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
-	Status    string    `json:"status"`
 }
 
 type RoleUser struct {
@@ -27,5 +26,5 @@ type RoleUser struct {
 	NivelOpcion  int       `json:"nivel_opcion" binding:"required"`
 	CreatedAt    time.Time `json:"created_at" `
 	UpdatedAt    time.Time `json:"updated_at" `
-	Status       string    `json:"status" `
+	Status       bool      `json:"status" `
 }

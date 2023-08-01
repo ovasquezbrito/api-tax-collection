@@ -7,17 +7,15 @@ import (
 
 type Role struct {
 	Id        int       `db:"id"`
-	NameRole  string    `db:"name_role" binding:"required"`
-	NivelRole int       `db:"nivel_role" binding:"required"`
+	RoleName  string    `db:"role_name" binding:"required"`
+	Status    bool      `db:"status"`
 	CreatedAt time.Time `db:"created_at"`
 	UpdatedAt time.Time `db:"updated_at"`
-	Status    string    `db:"status"`
 }
 
 func (i Role) UpperCase() *Role {
 	return &Role{
-		NameRole:  strings.ToUpper(i.NameRole),
-		NivelRole: i.NivelRole,
-		Status:    i.Status,
+		RoleName: strings.ToUpper(i.RoleName),
+		Status:   i.Status,
 	}
 }

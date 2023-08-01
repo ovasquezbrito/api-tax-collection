@@ -6,9 +6,9 @@ type LoginUser struct {
 }
 
 type UserResponse struct {
-	ID     int    `json:"id"`
-	Email  string `json:"email"`
-	Name   string `json:"name"`
-	UriImg string `json:"uri_img"`
-	Token  string `json:"token"`
+	ID         int    `json:"id"`
+	Email      string `json:"email"`
+	Name       string `json:"name"`
+	AvatarUser string `json:"avatar_user"`
+	Token      string `json:"token"`
 }

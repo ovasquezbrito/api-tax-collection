@@ -22,10 +22,10 @@ func (r *AuthPostgres) CreateUser(ctx context.Context, user entity.User) (int, e
 	query := fmt.Sprintf(
 		`
 			INSERT INTO %s (
-				first_last, 
+				first_last_name, 
 				email, 
 				password,
-				uri_img
+				avatar_user
 			) 
 			values ($1, $2, $3, $4) 
 			RETURNING id`,
@@ -37,7 +37,7 @@ func (r *AuthPostgres) CreateUser(ctx context.Context, user entity.User) (int, e
 		user.FirstLast,
 		user.Email,
 		user.Password,
-		user.UriImg,
+		user.AvatarUser,
 	)
 	if err := row.Scan(&id); err != nil {
 		return 0, err
@@ -49,7 +49,7 @@ func (r *AuthPostgres) GetUser(ctx context.Context, email, password string) (ent
 	var user entity.User
 	query := fmt.Sprintf(
 		`
-		SELECT us.id, us.first_last as name, us.email, us.password, us.uri_img 
+		SELECT us.id, us.first_last_name as name, us.email, us.password, us.avatar_user 
         FROM %s AS us
      	WHERE trim(us.email)=$1 AND trim(us.password)=$2
 	`,
@@ -69,10 +69,10 @@ func (r *AuthPostgres) UpdateUser(ctx context.Context, idUser int, user entity.U
 	query := fmt.Sprintf(
 		`
 			UPDATE %s SET
-				first_last = $1,
+				first_last_name = $1,
 				email = $2,
 				password = $3,
-				uri_img = $4
+				avatar_user = $4
 			WHERE id = $5 
 			RETURNING id
 		`,
@@ -84,7 +84,7 @@ func (r *AuthPostgres) UpdateUser(ctx context.Context, idUser int, user entity.U
 		user.FirstLast,
 		user.Email,
 		user.Password,
-		user.UriImg,
+		user.AvatarUser,
 		idUser,
 	)
 	if err := row.Scan(&id); err != nil {
@@ -97,7 +97,7 @@ func (r *AuthPostgres) GetUserById(ctx context.Context, idUser int) (*entity.Use
 	u := &entity.User{}
 	query := fmt.Sprintf(
 		`
-			SELECT us.id, us.first_last as name, us.email, us.username, us.password, us.uri_img
+			SELECT us.id, us.first_last_name as name, us.email, us.username, us.password, us.avatar_user
      	FROM %s AS us
      	WHERE us.id = $1
 		`,
@@ -115,7 +115,7 @@ func (r *AuthPostgres) GetUserByUserName(ctx context.Context, email string) (int
 	var user entity.User
 	query := fmt.Sprintf(
 		`
-			SELECT us.first_last as name, us.email, us.password, us.uri_img
+			SELECT us.first_last_name as name, us.email, us.password, us.avatar_user
      	FROM %s AS us
      	WHERE trim(us.email) = $1
 		`,
@@ -133,7 +133,7 @@ func (r *AuthPostgres) GetUserByUserEmail(ctx context.Context, email string) (*e
 	u := &entity.User{}
 	query := fmt.Sprintf(
 		`
-			SELECT us.id, us.first_last as name, us.email, us.password, us.uri_img
+			SELECT us.id, us.first_last_name as name, us.email, us.password, us.avatar_user
      	FROM %s AS us
      	WHERE trim(us.email) = $1
 		`,

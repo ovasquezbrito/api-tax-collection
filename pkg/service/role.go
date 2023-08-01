@@ -34,8 +34,7 @@ func (s *RolesService) GetAll(ctx context.Context, query models.QueryParameter) 
 	for _, r := range rr {
 		roles = append(roles, models.Role{
 			IdRole:    r.Id,
-			NameRole:  r.NameRole,
-			NivelRole: r.NivelRole,
+			RoleName:  r.RoleName,
 			CreatedAt: r.CreatedAt,
 			UpdatedAt: r.UpdatedAt,
 			Status:    r.Status,
@@ -52,8 +51,7 @@ func (s *RolesService) GetById(ctx context.Context, idRol int) (*models.Role, er
 	}
 	return &models.Role{
 		IdRole:    r.Id,
-		NameRole:  r.NameRole,
-		NivelRole: r.NivelRole,
+		RoleName:  r.RoleName,
 		CreatedAt: r.CreatedAt,
 		UpdatedAt: r.UpdatedAt,
 		Status:    r.Status,

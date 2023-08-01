@@ -39,10 +39,10 @@ func (s *AuthService) CreateUser(ctx context.Context, user models.User) (int, er
 	input := user.UpperCase()
 
 	i := entity.User{
-		FirstLast: input.FirstLast,
-		Email:     input.Email,
-		Password:  input.Password,
-		UriImg:    input.UriImg,
+		FirstLast:  input.FirstLast,
+		Email:      input.Email,
+		Password:   input.Password,
+		AvatarUser: input.AvatarUser,
 	}
 
 	return s.repo.CreateUser(ctx, i)
@@ -56,11 +56,11 @@ func (s *AuthService) UpdateUser(ctx context.Context, idUser int, user models.Us
 	user.Password = hashedPassword
 	input := user.UpperCase()
 	i := entity.User{
-		Id:        idUser,
-		FirstLast: input.FirstLast,
-		Email:     input.Email,
-		Password:  input.Password,
-		UriImg:    input.UriImg,
+		Id:         idUser,
+		FirstLast:  input.FirstLast,
+		Email:      input.Email,
+		Password:   input.Password,
+		AvatarUser: input.AvatarUser,
 	}
 	return s.repo.UpdateUser(ctx, idUser, i)
 }
@@ -72,11 +72,11 @@ func (s *AuthService) GetUserById(ctx context.Context, IdUser int) (*models.User
 	}
 
 	return &models.User{
-		Id:        u.Id,
-		FirstLast: u.FirstLast,
-		Email:     u.Email,
-		Password:  u.Password,
-		UriImg:    u.UriImg,
+		Id:         u.Id,
+		FirstLast:  u.FirstLast,
+		Email:      u.Email,
+		Password:   u.Password,
+		AvatarUser: u.AvatarUser,
 	}, nil
 }
 
@@ -130,11 +130,11 @@ func (s *AuthService) LoginUser(ctx context.Context, email, password string) (mo
 	}
 
 	u := &models.User{
-		Id:        user.Id,
-		FirstLast: user.FirstLast,
-		Email:     user.Email,
-		Password:  user.Password,
-		UriImg:    user.UriImg,
+		Id:         user.Id,
+		FirstLast:  user.FirstLast,
+		Email:      user.Email,
+		Password:   user.Password,
+		AvatarUser: user.AvatarUser,
 	}
 
 	return models.LoginUserResponse{

@@ -15,5 +15,5 @@ type RoleUser struct {
 	NivelOpcion  int       `db:"nivel_opcion" binding:"required"`
 	CreatedAt    time.Time `db:"created_at"`
 	UpdatedAt    time.Time `db:"updated_at"`
-	Status       string    `db:"status"`
+	Status       bool      `db:"status"`
 }
