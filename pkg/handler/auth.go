@@ -30,13 +30,6 @@ func (h *Handler) register(c *gin.Context) {
 		return
 	}
 
-	existUserName, err := h.services.Authorization.GetUserByUserName(c, input.Email)
-
-	if existUserName > 0 {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
-		return
-	}
-
 	dto := models.User{
 		FirstLast:  input.FirstLast,
 		Email:      input.Email,

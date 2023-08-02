@@ -4,7 +4,7 @@ import "strings"
 
 type User struct {
 	Id         int    `json:"id"`
-	FirstLast  string `json:"name" binding:"required"`
+	FirstLast  string `json:"first_last_name" binding:"required"`
 	Email      string `json:"email" binding:"required"`
 	Password   string `json:"password" `
 	AvatarUser string `json:"avatar_user" binding:"required"`

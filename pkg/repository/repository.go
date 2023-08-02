@@ -12,7 +12,6 @@ type Authorization interface {
 	GetUser(ctx context.Context, email, password string) (entity.User, error)
 	UpdateUser(ctx context.Context, userId int, user entity.User) (int, error)
 	GetUserById(ctx context.Context, userId int) (*entity.User, error)
-	GetUserByUserName(ctx context.Context, email string) (int, error)
 	GetUserByUserEmail(ctx context.Context, email string) (*entity.User, error)
 	GetMenuOptionAll(ctx context.Context, IdUser int) ([]entity.RoleUser, error)
 }

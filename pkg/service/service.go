@@ -14,7 +14,6 @@ type Authorization interface {
 	LoginUser(ctx context.Context, email, password string) (models.LoginUserResponse, error)
 	UpdateUser(ctx context.Context, idUser int, user models.User) (int, error)
 	GetUserById(ctx context.Context, idUser int) (*models.User, error)
-	GetUserByUserName(ctx context.Context, email string) (int, error)
 	ParseToken(token string) (string, error)
 	VerifyToken(accessToken string) (*token.Payload, error)
 	GetMenuOptionAll(ctx context.Context, IdUser int) ([]models.RoleUser, error)

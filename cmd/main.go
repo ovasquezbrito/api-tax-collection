@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	_ "github.com/lib/pq"
+	_ "github.com/jackc/pgx/v5"
 	"github.com/sirupsen/logrus"
 
 	baseapp "github.com/ovasquezbrito/tax-collection"

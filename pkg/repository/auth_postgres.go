@@ -32,14 +32,9 @@ func (r *AuthPostgres) CreateUser(ctx context.Context, user entity.User) (int, e
 		usersTable,
 	)
 
-	row := r.db.QueryRow(
-		query,
-		user.FirstLast,
-		user.Email,
-		user.Password,
-		user.AvatarUser,
-	)
-	if err := row.Scan(&id); err != nil {
+	row, err := r.db.ExecContext(ctx, query, user.FirstLast, user.Email, user.Password, user.AvatarUser)
+	fmt.Println(row)
+	if err != nil {
 		return 0, err
 	}
 	return id, nil
@@ -72,8 +67,9 @@ func (r *AuthPostgres) UpdateUser(ctx context.Context, idUser int, user entity.U
 				first_last_name = $1,
 				email = $2,
 				password = $3,
-				avatar_user = $4
-			WHERE id = $5 
+				avatar_user = $4,
+				status = $5
+			WHERE id = $6 
 			RETURNING id
 		`,
 		usersTable,
@@ -85,6 +81,7 @@ func (r *AuthPostgres) UpdateUser(ctx context.Context, idUser int, user entity.U
 		user.Email,
 		user.Password,
 		user.AvatarUser,
+		user.Status,
 		idUser,
 	)
 	if err := row.Scan(&id); err != nil {
@@ -97,7 +94,7 @@ func (r *AuthPostgres) GetUserById(ctx context.Context, idUser int) (*entity.Use
 	u := &entity.User{}
 	query := fmt.Sprintf(
 		`
-			SELECT us.id, us.first_last_name as name, us.email, us.username, us.password, us.avatar_user
+			SELECT us.id, us.first_last_name as name, us.email, us.username, us.password, us.avatar_user, us.status
      	FROM %s AS us
      	WHERE us.id = $1
 		`,
@@ -111,36 +108,19 @@ func (r *AuthPostgres) GetUserById(ctx context.Context, idUser int) (*entity.Use
 	return u, nil
 }
 
-func (r *AuthPostgres) GetUserByUserName(ctx context.Context, email string) (int, error) {
-	var user entity.User
-	query := fmt.Sprintf(
-		`
-			SELECT us.first_last_name as name, us.email, us.password, us.avatar_user
-     	FROM %s AS us
-     	WHERE trim(us.email) = $1
-		`,
-		usersTable,
-	)
-
-	err := r.db.Get(&user, query, email)
-	if err != nil {
-		return 0, errors.New("no hubo resultado")
-	}
-	return 1, errors.New("ya existe un usuario con este nombre")
-}
-
 func (r *AuthPostgres) GetUserByUserEmail(ctx context.Context, email string) (*entity.User, error) {
+	fmt.Println(email)
 	u := &entity.User{}
 	query := fmt.Sprintf(
 		`
-			SELECT us.id, us.first_last_name as name, us.email, us.password, us.avatar_user
+			SELECT us.id, us.first_last_name, us.email, us.password, us.avatar_user, us.status, us.created_at, us.updated_at
      	FROM %s AS us
      	WHERE trim(us.email) = $1
 		`,
 		usersTable,
 	)
 
-	err := r.db.Get(u, query, email)
+	err := r.db.GetContext(ctx, u, query, email)
 	if err != nil {
 		return u, errors.New("no hubo resultado")
 	}

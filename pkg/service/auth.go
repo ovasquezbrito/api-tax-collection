@@ -31,6 +31,13 @@ func NewAuthService(repo repository.Authorization, tokenMaker token.Maker, confi
 }
 
 func (s *AuthService) CreateUser(ctx context.Context, user models.User) (int, error) {
+	e := strings.ToLower(user.Email)
+	u, _ := s.repo.GetUserByUserEmail(ctx, e)
+	fmt.Println(u)
+	if u.Id != 0 {
+		return 0, errors.New("user already exists")
+	}
+
 	hashedPassword, err := util.HashPassword(user.Password)
 	if err != nil {
 		return 0, errors.New("invalid signing method")
@@ -78,10 +85,6 @@ func (s *AuthService) GetUserById(ctx context.Context, IdUser int) (*models.User
 		Password:   u.Password,
 		AvatarUser: u.AvatarUser,
 	}, nil
-}
-
-func (s *AuthService) GetUserByUserName(ctx context.Context, email string) (int, error) {
-	return s.repo.GetUserByUserName(ctx, strings.ToLower(email))
 }
 
 func (s *AuthService) GetMenuOptionAll(ctx context.Context, idUser int) ([]models.RoleUser, error) {
