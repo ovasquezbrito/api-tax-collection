@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"strings"
+	"time"
+)
 
 type UserRole struct {
 	UserID int64 `json:"user_id"`
@@ -10,6 +13,7 @@ type UserRole struct {
 type Role struct {
 	IdRole    int       `json:"id_role"`
 	RoleName  string    `json:"role_name" binding:"required"`
+	RoleNivel int       `json:"role_nivel"`
 	Status    bool      `json:"status"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
@@ -27,4 +31,11 @@ type RoleUser struct {
 	CreatedAt    time.Time `json:"created_at" `
 	UpdatedAt    time.Time `json:"updated_at" `
 	Status       bool      `json:"status" `
+}
+
+func (i Role) UpperCase() *Role {
+	return &Role{
+		RoleName:  strings.ToLower(i.RoleName),
+		RoleNivel: i.RoleNivel,
+	}
 }

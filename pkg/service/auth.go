@@ -33,7 +33,6 @@ func NewAuthService(repo repository.Authorization, tokenMaker token.Maker, confi
 func (s *AuthService) CreateUser(ctx context.Context, user models.User) (int, error) {
 	e := strings.ToLower(user.Email)
 	u, _ := s.repo.GetUserByUserEmail(ctx, e)
-	fmt.Println(u)
 	if u.Id != 0 {
 		return 0, errors.New("user already exists")
 	}

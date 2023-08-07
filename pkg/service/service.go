@@ -20,8 +20,10 @@ type Authorization interface {
 }
 
 type RoleService interface {
+	CreateRole(ctx context.Context, user models.Role) (int, error)
 	GetAll(ctx context.Context, query models.QueryParameter) ([]models.Role, int, error)
 	GetById(ctx context.Context, idRol int) (*models.Role, error)
+	DeleteById(ctx context.Context, idRol int) (int64, error)
 }
 
 type Service struct {

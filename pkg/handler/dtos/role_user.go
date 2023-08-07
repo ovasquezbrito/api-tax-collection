@@ -7,8 +7,8 @@ import (
 )
 
 type Role struct {
-	NameRole  string    `json:"name_role" binding:"required"`
-	NivelRole int       `json:"nivel_role" binding:"required"`
+	RoleName  string    `json:"role_name" binding:"required"`
+	RoleNivel int       `json:"role_nivel" binding:"required"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 	Status    string    `json:"status"`

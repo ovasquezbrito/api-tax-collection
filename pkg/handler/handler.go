@@ -51,12 +51,15 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	}
 
 	//api := router.Group("/api", h.userIdentity)
-	api := router.Group("/api", h.authMiddleware(h.tokenMaker))
+	//api := router.Group("/api", h.authMiddleware(h.tokenMaker))
+	api := router.Group("/api")
 	{
 		roles := api.Group("/roles")
 		{
 			roles.GET("/", h.getAllRoles)
 			roles.GET("/:id/show", h.getRoleById)
+			roles.DELETE("/:id/delete", h.deleteRoleById)
+			roles.POST("/new", h.createRole)
 		}
 
 		menus := api.Group("/menus")

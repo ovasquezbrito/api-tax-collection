@@ -32,11 +32,8 @@ func (r *AuthPostgres) CreateUser(ctx context.Context, user entity.User) (int, e
 		usersTable,
 	)
 
-	row, err := r.db.ExecContext(ctx, query, user.FirstLast, user.Email, user.Password, user.AvatarUser)
-	fmt.Println(row)
-	if err != nil {
-		return 0, err
-	}
+	_ = r.db.QueryRowContext(ctx, query, user.FirstLast, user.Email, user.Password, user.AvatarUser).Scan(&id)
+
 	return id, nil
 }
 
@@ -109,7 +106,6 @@ func (r *AuthPostgres) GetUserById(ctx context.Context, idUser int) (*entity.Use
 }
 
 func (r *AuthPostgres) GetUserByUserEmail(ctx context.Context, email string) (*entity.User, error) {
-	fmt.Println(email)
 	u := &entity.User{}
 	query := fmt.Sprintf(
 		`

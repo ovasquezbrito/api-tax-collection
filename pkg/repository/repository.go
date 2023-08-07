@@ -17,8 +17,11 @@ type Authorization interface {
 }
 
 type RoleRepository interface {
+	CreateRole(ctx context.Context, role entity.Role) (int, error)
 	GetAll(ctx context.Context, query entity.QueryParameter) ([]entity.Role, int, error)
 	GetById(ctx context.Context, idRol int) (*entity.Role, error)
+	GetRoleByName(c context.Context, rolName string) (*entity.Role, error)
+	DeleteById(ctx context.Context, idRol int) (int64, error)
 }
 
 type Repository struct {

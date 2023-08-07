@@ -2,6 +2,9 @@ package service
 
 import (
 	"context"
+	"errors"
+	"fmt"
+	"strings"
 
 	"github.com/ovasquezbrito/tax-collection/pkg/entity"
 	"github.com/ovasquezbrito/tax-collection/pkg/models"
@@ -14,6 +17,26 @@ type RolesService struct {
 
 func NewRoleService(repo repository.RoleRepository) *RolesService {
 	return &RolesService{repo: repo}
+}
+
+func (s *RolesService) CreateRole(ctx context.Context, rol models.Role) (int, error) {
+	r := strings.ToLower(rol.RoleName)
+	r = strings.TrimSpace(r)
+	fmt.Println(r)
+	u, _ := s.repo.GetRoleByName(ctx, r)
+	fmt.Println(u)
+	if u.Id != 0 {
+		return 0, errors.New("user already exists")
+	}
+
+	input := rol.UpperCase()
+
+	i := entity.Role{
+		RoleName:  input.RoleName,
+		RoleNivel: input.RoleNivel,
+	}
+
+	return s.repo.CreateRole(ctx, i)
 }
 
 func (s *RolesService) GetAll(ctx context.Context, query models.QueryParameter) ([]models.Role, int, error) {
@@ -56,4 +79,13 @@ func (s *RolesService) GetById(ctx context.Context, idRol int) (*models.Role, er
 		UpdatedAt: r.UpdatedAt,
 		Status:    r.Status,
 	}, nil
+}
+
+func (s *RolesService) DeleteById(ctx context.Context, idRol int) (int64, error) {
+
+	r, err := s.repo.DeleteById(ctx, idRol)
+	if err != nil {
+		return 0, err
+	}
+	return r, nil
 }
