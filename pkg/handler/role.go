@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -23,7 +22,6 @@ func (h *Handler) createRole(c *gin.Context) {
 		RoleNivel: input.RoleNivel,
 	}
 
-	fmt.Println(r)
 	id, err := h.services.RoleService.CreateRole(c, r)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
@@ -105,6 +103,6 @@ func (h *Handler) deleteRoleById(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"data": item,
+		"RowsAffected": item,
 	})
 }

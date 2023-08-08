@@ -19,10 +19,10 @@ func NewRoleService(repo repository.RoleRepository) *RolesService {
 }
 
 func (s *RolesService) CreateRole(ctx context.Context, rol models.Role) (int, error) {
-	r := strings.ToLower(rol.RoleName)
-	r = strings.TrimSpace(r)
-	u, _ := s.repo.GetRoleByName(ctx, r)
-	if u.RoleName == r {
+	role := strings.ToLower(rol.RoleName)
+	role = strings.TrimSpace(role)
+	r, _ := s.repo.GetRoleByName(ctx, role)
+	if r.Id != 0 {
 		return 0, errors.New("user already exists")
 	}
 

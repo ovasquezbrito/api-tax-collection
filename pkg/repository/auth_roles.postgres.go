@@ -40,10 +40,13 @@ func (r *RolePostgres) GetAll(ctx context.Context, queryp entity.QueryParameter)
 	offset := (queryp.Page - 1) * queryp.Limit
 	search_field_one := "'%" + queryp.Search + "%'"
 
-	query := fmt.Sprintf(`SELECT id, role_name, role_nivel, status 
-						  FROM %s
-						  WHERE role_name like %s
-						  ORDER BY name_role LIMIT $1 OFFSET $2`,
+	query := fmt.Sprintf(
+		`
+			SELECT r.id, TRIM(r.role_name) as role_name, r.role_nivel, r.status, r.created_at, r.updated_at 
+			FROM %s as r
+			WHERE r.role_name like %s
+			ORDER BY r.role_name LIMIT $1 OFFSET $2
+		`,
 		roleTable,
 		search_field_one,
 	)
@@ -64,9 +67,9 @@ func (r *RolePostgres) GetAll(ctx context.Context, queryp entity.QueryParameter)
 
 func (r *RolePostgres) GetRoleByName(ctx context.Context, rolName string) (*entity.Role, error) {
 	item := &entity.Role{}
-	query := fmt.Sprintf(`SELECT id, TRIM(role_name), role_nivel, status 
-		FROM %s
-		WHERE TRIM(role_name) = $1`,
+	query := fmt.Sprintf(`SELECT r.id, TRIM(r.role_name) as role_name, r.role_nivel, r.status, r.created_at, r.updated_at 
+		FROM %s as r
+		WHERE TRIM(r.role_name) = $1`,
 		roleTable,
 	)
 
@@ -74,7 +77,7 @@ func (r *RolePostgres) GetRoleByName(ctx context.Context, rolName string) (*enti
 	if err != nil {
 		return item, errors.New("error al realizar la consulta")
 	}
-	fmt.Println("esto viene de la tabla", item.Id)
+
 	return item, nil
 }
 
@@ -108,4 +111,20 @@ func (r *RolePostgres) DeleteById(ctx context.Context, idRol int) (int64, error)
 	}
 
 	return id, nil
+}
+
+func (r *RolePostgres) GetRoleByIdUser(ctx context.Context, idUser, idRole int) (*entity.Role, error) {
+	item := &entity.Role{}
+	query := fmt.Sprintf(`SELECT r.id, TRIM(r.role_name) as role_name, r.role_nivel, r.status, r.created_at, r.updated_at 
+		FROM %s as r
+		WHERE TRIM(r.role_name) = $1`,
+		roleTable,
+	)
+
+	err := r.db.GetContext(ctx, item, query, idRole)
+	if err != nil {
+		return item, errors.New("error al realizar la consulta")
+	}
+
+	return item, nil
 }

@@ -5,22 +5,19 @@ CREATE TABLE "users" (
   "avatar_user" text NOT NULL,
   "password" varchar(255) NOT NULL,
   "status" bool NOT NULL DEFAULT true,
+  "isadmin" bool NOT NULL DEFAULT false,
+  "fk_role" bigint,
   "created_at" timestamptz DEFAULT (now()),
   "updated_at" timestamptz DEFAULT (now())
 );
 
 CREATE TABLE "roles" (
   "id" bigserial PRIMARY KEY,
-  "role_name" char(50) NOT NULL DEFAULT 'regular',
+  "role_name" char(50) NOT NULL DEFAULT 'operador',
+  "role_nivel" bigint NOT NULL DEFAULT 0,
   "status" bool NOT NULL DEFAULT true,
   "created_at" timestamptz DEFAULT (now()),
   "updated_at" timestamptz DEFAULT (now())
-);
-
-CREATE TABLE "users_roles" (
-  "id" bigserial PRIMARY KEY,
-  "fk_user" bigint,
-  "fk_role" bigint
 );
 
 CREATE TABLE "menu_options" (
@@ -36,10 +33,10 @@ CREATE TABLE "menu_options" (
   "updated_at" timestamptz DEFAULT (now())
 );
 
-CREATE TABLE "users_roles_menu_option" (
+CREATE TABLE "roles_menu_option" (
   "id" bigserial PRIMARY KEY,
-  "fk_user" bigint,
   "fk_menu_option" bigint,
+  "fk_role" bigint,
   "nivel" bigint NOT NULL DEFAULT 0
 );
 
@@ -164,17 +161,11 @@ CREATE INDEX ON "users" ("email");
 
 CREATE INDEX ON "roles" ("role_name");
 
-CREATE INDEX ON "users_roles" ("fk_user");
-
-CREATE INDEX ON "users_roles" ("fk_role");
-
 CREATE INDEX ON "menu_options" ("component_or_page_url");
 
 CREATE INDEX ON "menu_options" ("address_url");
 
-CREATE INDEX ON "users_roles_menu_option" ("fk_user");
-
-CREATE INDEX ON "users_roles_menu_option" ("fk_menu_option");
+CREATE INDEX ON "roles_menu_option" ("fk_menu_option");
 
 CREATE INDEX ON "companies" ("name_company");
 
@@ -204,13 +195,11 @@ COMMENT ON COLUMN "taxpayers"."liable_taxpayer" IS 'Responsable';
 
 COMMENT ON COLUMN "taxpayers"."email_liable_taxpayer" IS 'Email del responsable';
 
-ALTER TABLE "users_roles" ADD FOREIGN KEY ("fk_user") REFERENCES "users" ("id");
+ALTER TABLE "users" ADD FOREIGN KEY ("fk_role") REFERENCES "roles" ("id");
 
-ALTER TABLE "users_roles" ADD FOREIGN KEY ("fk_role") REFERENCES "roles" ("id");
+ALTER TABLE "roles_menu_option" ADD FOREIGN KEY ("fk_menu_option") REFERENCES "menu_options" ("id");
 
-ALTER TABLE "users_roles_menu_option" ADD FOREIGN KEY ("fk_user") REFERENCES "users" ("id");
-
-ALTER TABLE "users_roles_menu_option" ADD FOREIGN KEY ("fk_menu_option") REFERENCES "menu_options" ("id");
+ALTER TABLE "roles_menu_option" ADD FOREIGN KEY ("fk_role") REFERENCES "roles" ("id");
 
 ALTER TABLE "institutions" ADD FOREIGN KEY ("fk_companny") REFERENCES "companies" ("id");
 

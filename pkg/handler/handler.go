@@ -51,8 +51,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	}
 
 	//api := router.Group("/api", h.userIdentity)
-	//api := router.Group("/api", h.authMiddleware(h.tokenMaker))
-	api := router.Group("/api")
+	api := router.Group("/api", h.authMiddleware(h.tokenMaker))
 	{
 		roles := api.Group("/roles")
 		{

@@ -145,5 +145,4 @@ func (r *AuthPostgres) GetMenuOptionAll(ctx context.Context, idUser int) ([]enti
 	}
 
 	return lists, nil
-
 }
