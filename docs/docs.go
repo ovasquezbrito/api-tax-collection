@@ -16,14 +16,14 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/institutos": {
+        "/api/roles": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "All institutos",
+                "description": "Todos los roles",
                 "consumes": [
                     "application/json"
                 ],
@@ -31,10 +31,10 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "institutos"
+                    "roles"
                 ],
-                "summary": "Get All institutos",
-                "operationId": "get-all-institutos",
+                "summary": "Obtener todos los roles",
+                "operationId": "get-all-roles",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -69,14 +69,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/institutos/{id}/show": {
+        "/api/roles/{id}/show": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "All institutos",
+                "description": "Un rol por id",
                 "consumes": [
                     "application/json"
                 ],
@@ -84,14 +84,14 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "institutos"
+                    "roles"
                 ],
-                "summary": "Get Id instituto",
+                "summary": "Obtener un rol por id",
                 "operationId": "get-byid-instituto",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Id Instituto",
+                        "description": "Id Role",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -131,7 +131,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/institutos/new": {
+        "/api/roles/new": {
 
             "post": {
                 "security": [
@@ -139,7 +139,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "create instituto",
+                "description": "Crear un rol",
                 "consumes": [
                     "application/json"
                 ],
@@ -147,13 +147,13 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "institutos"
+                    "roles"
                 ],
-                "summary": "create institutos",
-                "operationId": "create-instituto",
+                "summary": "crea un rol",
+                "operationId": "create-role",
                 "parameters": [
                     {
-                        "description": "instituto info",
+                        "description": "roles info",
                         "name": "input",
                         "in": "body",
                         "required": true,
@@ -196,7 +196,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/institutos/{id}/update": {
+        "/api/roles/{id}/update": {
 
             "put": {
                 "security": [
@@ -204,7 +204,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Update instituto",
+                "description": "Actualizar un rol",
                 "consumes": [
                     "application/json"
                 ],
@@ -212,20 +212,20 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "institutos"
+                    "roles"
                 ],
-                "summary": "update institutos",
-                "operationId": "update-instituto",
+                "summary": "actializa un rol",
+                "operationId": "update-role",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Id Instituto",
+                        "description": "Id Role",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "instituto info",
+                        "description": "Role info",
                         "name": "input",
                         "in": "body",
                         "required": true,
@@ -268,7 +268,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/sign-in": {
+        "/user/login": {
             "post": {
                 "description": "login",
                 "consumes": [
@@ -327,7 +327,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/sign-up": {
+        "/user/register": {
             "post": {
                 "description": "creaar un usuario",
                 "consumes": [
@@ -402,7 +402,7 @@ const docTemplate = `{
                 "data": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/stopapp.Instituto"
+                        "$ref": "#/definitions/models.roles"
                     }
                 }
             }
@@ -411,18 +411,18 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "password",
-                "username"
+                "email"
             ],
             "properties": {
                 "password": {
                     "type": "string"
                 },
-                "username": {
+                "email": {
                     "type": "string"
                 }
             }
         },
-        "stopapp.Instituto": {
+        "models.Role": {
             "type": "object",
             "required": [
                 "name",
@@ -440,33 +440,34 @@ const docTemplate = `{
                 }
             }
         },
-        "stopapp.User": {
+        "models.User": {
             "type": "object",
             "required": [
-                "name",
-                "password",
-                "username",
+                "first_last_name",
                 "email",
-                "phone",
-                "istituto"
+                "password",
+                "avatar_user",
+                "is_admin",
+                "fk_role",
             ],
             "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "username": {
+                "first_last_name": {
                     "type": "string"
                 },
                 "email": {
                     "type": "string"
                 },
-                "phone": {
+                "password": {
                     "type": "string"
                 },
-                "instituto": {
+                "avatar_user": {
+                    "type": "string"
+                },
+                
+                "is_admin": {
+                    "type": "boolean"
+                },
+                "fk_role": {
                     "type": "integer"
                 }
             }

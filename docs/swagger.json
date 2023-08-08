@@ -1,22 +1,22 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "API Server el registro de donaciones",
-        "title": "App Donaciones",
+        "description": "API Server el registro de contribuyentes",
+        "title": "App Recaudación de Impuestos",
         "contact": {},
         "version": "1.0"
     },
     "host": "localhost:8080",
     "basePath": "/",
     "paths": {
-        "/api/institutos": {
+        "/api/roles": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "All institutos",
+                "description": "Todos los roles",
                 "consumes": [
                     "application/json"
                 ],
@@ -24,9 +24,9 @@
                     "application/json"
                 ],
                 "tags": [
-                    "institutos"
+                    "roles"
                 ],
-                "summary": "Get All institutos",
+                "summary": "Obtener todos los roles",
                 "operationId": "get-all-institutos",
                 "responses": {
                     "200": {
@@ -124,7 +124,7 @@
                 }
             }
         },
-        "/api/institutos/new": {
+        "/api/roles/new": {
 
             "post": {
                 "security": [
@@ -189,7 +189,7 @@
                 }
             }
         },
-        "/api/institutos/{id}/update": {
+        "/api/roles/{id}/update": {
 
             "put": {
                 "security": [
@@ -261,7 +261,7 @@
                 }
             }
         },
-        "/auth/sign-in": {
+        "/user/login": {
             "post": {
                 "description": "login",
                 "consumes": [
@@ -320,7 +320,7 @@
                 }
             }
         },
-        "/auth/sign-up": {
+        "/user/register": {
             "post": {
                 "description": "creaar un usuario",
                 "consumes": [
@@ -433,7 +433,7 @@
                 }
             }
         },
-        "stopapp.User": {
+        "models.User": {
             "type": "object",
             "required": [
                 "name",

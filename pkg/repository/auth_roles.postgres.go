@@ -64,8 +64,7 @@ func (r *RolePostgres) GetAll(ctx context.Context, queryp entity.QueryParameter)
 
 func (r *RolePostgres) GetRoleByName(ctx context.Context, rolName string) (*entity.Role, error) {
 	item := &entity.Role{}
-	fmt.Println(rolName)
-	query := fmt.Sprintf(`SELECT role_name, role_nivel, status 
+	query := fmt.Sprintf(`SELECT id, TRIM(role_name), role_nivel, status 
 		FROM %s
 		WHERE TRIM(role_name) = $1`,
 		roleTable,
@@ -75,6 +74,7 @@ func (r *RolePostgres) GetRoleByName(ctx context.Context, rolName string) (*enti
 	if err != nil {
 		return item, errors.New("error al realizar la consulta")
 	}
+	fmt.Println("esto viene de la tabla", item.Id)
 	return item, nil
 }
 

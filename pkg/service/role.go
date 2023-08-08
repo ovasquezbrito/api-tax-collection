@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"errors"
-	"fmt"
 	"strings"
 
 	"github.com/ovasquezbrito/tax-collection/pkg/entity"
@@ -22,10 +21,8 @@ func NewRoleService(repo repository.RoleRepository) *RolesService {
 func (s *RolesService) CreateRole(ctx context.Context, rol models.Role) (int, error) {
 	r := strings.ToLower(rol.RoleName)
 	r = strings.TrimSpace(r)
-	fmt.Println(r)
 	u, _ := s.repo.GetRoleByName(ctx, r)
-	fmt.Println(u)
-	if u.Id != 0 {
+	if u.RoleName == r {
 		return 0, errors.New("user already exists")
 	}
 

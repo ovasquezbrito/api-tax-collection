@@ -63,7 +63,7 @@ info:
   title: App de stop
   version: "1.0"
 paths:
-  /api/institutos
+  /api/roles
     get:
       consumes:
       - application/json
@@ -137,7 +137,7 @@ paths:
       sumary: Create Instituto
       tags:
       - institutos
-  /auth/sign-in:
+  /user/login:
     post:
       consumes:
       - application/json
