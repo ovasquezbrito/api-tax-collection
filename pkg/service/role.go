@@ -23,7 +23,7 @@ func (s *RolesService) CreateRole(ctx context.Context, rol models.Role) (int, er
 	role = strings.TrimSpace(role)
 	r, _ := s.repo.GetRoleByName(ctx, role)
 	if r.Id != 0 {
-		return 0, errors.New("user already exists")
+		return 0, errors.New("nombre de rol existe")
 	}
 
 	input := rol.UpperCase()
@@ -83,7 +83,7 @@ func (s *RolesService) DeleteById(ctx context.Context, idRol int) (int64, error)
 	if err != nil {
 		return 0, err
 	}
-	if ur.Id != 0 {
+	if ur != nil {
 		return 0, errors.New("no se puede eliminar el rol porque tiene usuarios asociados")
 	}
 	r, err := s.repo.DeleteById(ctx, idRol)

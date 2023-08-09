@@ -21,18 +21,24 @@ type RoleRepository interface {
 	GetAll(ctx context.Context, query entity.QueryParameter) ([]entity.Role, int, error)
 	GetById(ctx context.Context, idRol int) (*entity.Role, error)
 	GetRoleByName(c context.Context, rolName string) (*entity.Role, error)
-	GetUserByIdRole(ctx context.Context, idRole int) (*entity.User, error)
+	GetUserByIdRole(ctx context.Context, idRole int) ([]entity.User, error)
 	DeleteById(ctx context.Context, idRol int) (int64, error)
+}
+type UserRepository interface {
+	GetAll(ctx context.Context, query entity.QueryParameter) ([]entity.UserResponse, int, error)
+	UpdateRoleToUser(ctx context.Context, idRole, idUser int) error
 }
 
 type Repository struct {
 	Authorization
 	RoleRepository
+	UserRepository
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Authorization:  NewAuthPostgres(db),
 		RoleRepository: NewRolePostgres(db),
+		UserRepository: NewUserPostgres(db),
 	}
 }

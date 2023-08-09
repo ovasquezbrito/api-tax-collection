@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jmoiron/sqlx"
 	"github.com/ovasquezbrito/tax-collection/pkg/entity"
 )
@@ -32,9 +33,16 @@ func (r *AuthPostgres) CreateUser(ctx context.Context, user entity.User) (int, e
 		usersTable,
 	)
 
-	_ = r.db.QueryRowContext(ctx, query, user.FirstLast, user.Email, user.Password, user.AvatarUser).Scan(&id)
+	err := r.db.QueryRowContext(ctx, query, user.FirstLast, user.Email, user.Password, user.FkRole, user.AvatarUser).Scan(&id)
+	switch {
+	case err == pgx.ErrNoRows:
+		return id, err
+	case err != nil:
+		return id, err
+	default:
+		return id, nil
+	}
 
-	return id, nil
 }
 
 func (r *AuthPostgres) GetUser(ctx context.Context, email, password string) (entity.User, error) {

@@ -7,9 +7,21 @@ type User struct {
 	FirstLast  string `db:"first_last_name" binding:"required"`
 	Email      string `db:"email" binding:"required"`
 	AvatarUser string `db:"avatar_user" binding:"required"`
-	IsAdmin    bool   `db:"is_admin"`
+	IsAdmin    bool   `db:"isadmin"`
 	FkRole     int    `db:"fk_role"`
 	Password   string `db:"password" `
+	Status     bool   `db:"status"`
+	CreatedAt  string `db:"created_at"`
+	UpdatedAt  string `db:"updated_at"`
+}
+
+type UserResponse struct {
+	Id         int    `db:"id"`
+	FirstLast  string `db:"first_last_name" `
+	Email      string `db:"email" `
+	AvatarUser string `db:"avatar_user"`
+	IsAdmin    bool   `db:"isadmin"`
+	FkRole     int    `db:"fk_role"`
 	Status     bool   `db:"status"`
 	CreatedAt  string `db:"created_at"`
 	UpdatedAt  string `db:"updated_at"`

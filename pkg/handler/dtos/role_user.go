@@ -8,10 +8,10 @@ import (
 
 type Role struct {
 	RoleName  string    `json:"role_name" binding:"required"`
-	RoleNivel int       `json:"role_nivel" binding:"required"`
+	RoleNivel int       `json:"role_nivel" `
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
-	Status    string    `json:"status"`
+	Status    bool      `json:"status"`
 }
 
 type RoleUser struct {
@@ -24,7 +24,7 @@ type RoleUser struct {
 	NivelOpcion  int       `json:"nivel_opcion" binding:"required"`
 	CreatedAt    time.Time `json:"created_at" `
 	UpdatedAt    time.Time `json:"updated_at" `
-	Status       string    `json:"status" `
+	Status       bool      `json:"status" `
 }
 
 type GetAllRolesMenuResponse struct {

@@ -26,14 +26,21 @@ type RoleService interface {
 	DeleteById(ctx context.Context, idRol int) (int64, error)
 }
 
+type UsersServices interface {
+	GetAll(ctx context.Context, query models.QueryParameter) ([]models.UserResponse, int, error)
+	UpdateRoleToUser(ctx context.Context, userRole models.AsociateRoleToUser) error
+}
+
 type Service struct {
 	Authorization
 	RoleService
+	UsersServices
 }
 
 func NewService(repos *repository.Repository, tokenMaker token.Maker, config util.Config) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos.Authorization, tokenMaker, config),
 		RoleService:   NewRoleService(repos.RoleRepository),
+		UsersServices: NewUsersService(repos.UserRepository, repos.Authorization, repos.RoleRepository),
 	}
 }

@@ -113,21 +113,21 @@ func (r *RolePostgres) DeleteById(ctx context.Context, idRol int) (int64, error)
 	return id, nil
 }
 
-func (r *RolePostgres) GetUserByIdRole(ctx context.Context, idRole int) (*entity.User, error) {
-	item := &entity.User{}
+func (r *RolePostgres) GetUserByIdRole(ctx context.Context, idRole int) ([]entity.User, error) {
+	var item []entity.User
 	query := fmt.Sprintf(
 		`
-		SELECT u."id" as id, u.first_last_name,	u.email, u.avatar_user, u.status, u.isadmin, u.fk_role,
-		u.created_at, u.updated_at, u."password" as password
-    FROM %s AS u 
+		SELECT u.id, u.first_last_name,	u.email, u.avatar_user, u.status, u.isadmin, u.fk_role,
+		u.created_at, u.updated_at, u.password
+    FROM %s as u 
 		WHERE u.fk_role = $1
 		`,
 		usersTable,
 	)
 
-	err := r.db.GetContext(ctx, item, query, idRole)
+	err := r.db.SelectContext(ctx, &item, query, idRole)
 	if err != nil {
-		return item, errors.New("error al realizar la consulta")
+		return item, err
 	}
 
 	return item, nil

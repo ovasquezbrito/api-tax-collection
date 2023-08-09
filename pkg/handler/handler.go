@@ -43,7 +43,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		ginSwagger.DefaultModelsExpandDepth(-1)),
 	)
 
-	auth := router.Group("/user")
+	auth := router.Group("/auth")
 	{
 		auth.POST("/login", h.login)
 		auth.POST("/register", h.register)
@@ -59,6 +59,14 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			roles.GET("/:id/show", h.getRoleById)
 			roles.DELETE("/:id/delete", h.deleteRoleById)
 			roles.POST("/new", h.createRole)
+		}
+
+		user := api.Group("/user")
+		{
+			user.GET("/", h.getAllUsers)
+			user.GET("/:id/show", h.getUserById)
+			user.POST("/new", h.createUser)
+			user.POST("/associaterole", h.associateRoleToUser)
 		}
 
 		menus := api.Group("/menus")
