@@ -113,12 +113,16 @@ func (r *RolePostgres) DeleteById(ctx context.Context, idRol int) (int64, error)
 	return id, nil
 }
 
-func (r *RolePostgres) GetRoleByIdUser(ctx context.Context, idUser, idRole int) (*entity.Role, error) {
-	item := &entity.Role{}
-	query := fmt.Sprintf(`SELECT r.id, TRIM(r.role_name) as role_name, r.role_nivel, r.status, r.created_at, r.updated_at 
-		FROM %s as r
-		WHERE TRIM(r.role_name) = $1`,
-		roleTable,
+func (r *RolePostgres) GetUserByIdRole(ctx context.Context, idRole int) (*entity.User, error) {
+	item := &entity.User{}
+	query := fmt.Sprintf(
+		`
+		SELECT u."id" as id, u.first_last_name,	u.email, u.avatar_user, u.status, u.isadmin, u.fk_role,
+		u.created_at, u.updated_at, u."password" as password
+    FROM %s AS u 
+		WHERE u.fk_role = $1
+		`,
+		usersTable,
 	)
 
 	err := r.db.GetContext(ctx, item, query, idRole)

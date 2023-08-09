@@ -21,6 +21,7 @@ type RoleRepository interface {
 	GetAll(ctx context.Context, query entity.QueryParameter) ([]entity.Role, int, error)
 	GetById(ctx context.Context, idRol int) (*entity.Role, error)
 	GetRoleByName(c context.Context, rolName string) (*entity.Role, error)
+	GetUserByIdRole(ctx context.Context, idRole int) (*entity.User, error)
 	DeleteById(ctx context.Context, idRol int) (int64, error)
 }
 

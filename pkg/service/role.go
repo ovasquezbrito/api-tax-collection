@@ -79,7 +79,13 @@ func (s *RolesService) GetById(ctx context.Context, idRol int) (*models.Role, er
 }
 
 func (s *RolesService) DeleteById(ctx context.Context, idRol int) (int64, error) {
-
+	ur, err := s.repo.GetUserByIdRole(ctx, idRol)
+	if err != nil {
+		return 0, err
+	}
+	if ur.Id != 0 {
+		return 0, errors.New("no se puede eliminar el rol porque tiene usuarios asociados")
+	}
 	r, err := s.repo.DeleteById(ctx, idRol)
 	if err != nil {
 		return 0, err
