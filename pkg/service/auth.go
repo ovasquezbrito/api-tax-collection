@@ -71,18 +71,20 @@ func (s *AuthService) UpdateUser(ctx context.Context, idUser int, user models.Us
 	return s.repo.UpdateUser(ctx, idUser, i)
 }
 
-func (s *AuthService) GetUserById(ctx context.Context, IdUser int) (*models.User, error) {
+func (s *AuthService) GetUserById(ctx context.Context, IdUser int) (*models.UserResponse, error) {
 	u, err := s.repo.GetUserById(ctx, IdUser)
 	if err != nil {
 		return nil, err
 	}
 
-	return &models.User{
+	return &models.UserResponse{
 		Id:         u.Id,
 		FirstLast:  u.FirstLast,
 		Email:      u.Email,
-		Password:   u.Password,
 		AvatarUser: u.AvatarUser,
+		Status:     u.Status,
+		IsAdmin:    u.IsAdmin,
+		FkRole:     u.FkRole,
 	}, nil
 }
 

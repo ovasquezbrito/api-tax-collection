@@ -26,17 +26,21 @@ func NewUsersService(
 func (s *UsersService) UpdateRoleToUser(ctx context.Context, userRole models.AsociateRoleToUser) error {
 	idUser := userRole.IdUser
 	idRole := userRole.IdRole
-	u, _ := s.repo2.GetUserById(ctx, idUser)
-	if u.Id != 0 {
-		return errors.New("usuario no existe")
+	_, err := s.repo2.GetUserById(ctx, idUser)
+	if err != nil {
+		return errors.New("user no existe")
 	}
 
-	r, _ := s.repo3.GetById(ctx, idRole)
-	if r.Id != 0 {
+	_, err = s.repo3.GetById(ctx, idRole)
+	if err != nil {
 		return errors.New("rol no existe")
 	}
 
-	return s.repo.UpdateRoleToUser(ctx, idUser, idRole)
+	err = s.repo.UpdateRoleToUser(ctx, idUser, idRole)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *UsersService) GetAll(ctx context.Context, query models.QueryParameter) ([]models.UserResponse, int, error) {

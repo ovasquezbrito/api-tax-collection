@@ -33,7 +33,7 @@ func (r *AuthPostgres) CreateUser(ctx context.Context, user entity.User) (int, e
 		usersTable,
 	)
 
-	err := r.db.QueryRowContext(ctx, query, user.FirstLast, user.Email, user.Password, user.FkRole, user.AvatarUser).Scan(&id)
+	err := r.db.QueryRowContext(ctx, query, user.FirstLast, user.Email, user.Password, user.AvatarUser).Scan(&id)
 	switch {
 	case err == pgx.ErrNoRows:
 		return id, err
@@ -95,20 +95,21 @@ func (r *AuthPostgres) UpdateUser(ctx context.Context, idUser int, user entity.U
 	return id, nil
 }
 
-func (r *AuthPostgres) GetUserById(ctx context.Context, idUser int) (*entity.User, error) {
-	u := &entity.User{}
+func (r *AuthPostgres) GetUserById(ctx context.Context, idUser int) (*entity.UserResponse, error) {
+	u := &entity.UserResponse{}
 	query := fmt.Sprintf(
 		`
-			SELECT us.id, us.first_last_name as name, us.email, us.username, us.password, us.avatar_user, us.status
+			SELECT us.id, us.first_last_name, us.email, us.avatar_user, us.status, us.isadmin, 
+			us.fk_role, us.created_at, us.updated_at
      	FROM %s AS us
      	WHERE us.id = $1
 		`,
 		usersTable,
 	)
 
-	err := r.db.Get(&u, query, idUser)
+	err := r.db.GetContext(ctx, u, query, idUser)
 	if err != nil {
-		return u, err //errors.New("error al realizar la consulta")
+		return u, errors.New("error al realizar la consulta")
 	}
 	return u, nil
 }

@@ -89,7 +89,7 @@ func (r *RolePostgres) GetById(ctx context.Context, idRol int) (*entity.Role, er
 		roleTable,
 	)
 
-	err := r.db.Get(item, query, idRol)
+	err := r.db.GetContext(ctx, item, query, idRol)
 	if err != nil {
 		return item, errors.New("error al realizar la consulta")
 	}
