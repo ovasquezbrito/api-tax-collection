@@ -17,7 +17,7 @@ func NewUserPostgres(db *sqlx.DB) *UserPostgres {
 	return &UserPostgres{db: db}
 }
 
-func (r *UserPostgres) UpdateRoleToUser(ctx context.Context, idRole, idUser int) error {
+func (r *UserPostgres) AddRoleToUser(ctx context.Context, idRole, idUser int) error {
 
 	query := fmt.Sprintf(
 		`

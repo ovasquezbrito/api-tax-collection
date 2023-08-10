@@ -106,7 +106,7 @@ func (h *Handler) associateRoleToUser(c *gin.Context) {
 		return
 	}
 
-	err := h.services.UsersServices.UpdateRoleToUser(c, input)
+	err := h.services.UsersServices.AddRoleToUser(c, input)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

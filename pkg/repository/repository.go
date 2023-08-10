@@ -26,7 +26,7 @@ type RoleRepository interface {
 }
 type UserRepository interface {
 	GetAll(ctx context.Context, query entity.QueryParameter) ([]entity.UserResponse, int, error)
-	UpdateRoleToUser(ctx context.Context, idRole, idUser int) error
+	AddRoleToUser(ctx context.Context, idRole, idUser int) error
 }
 
 type Repository struct {
