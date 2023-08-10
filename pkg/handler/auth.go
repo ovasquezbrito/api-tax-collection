@@ -44,7 +44,7 @@ func (h *Handler) register(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"id": id,
+		"uuid": id,
 	})
 }
 

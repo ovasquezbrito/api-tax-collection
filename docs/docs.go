@@ -16,6 +16,126 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth/login": {
+            "post": {
+                "description": "login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "SignIn",
+                "operationId": "login",
+                "parameters": [
+                    {
+                        "description": "credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.signInInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Datos del Usuario R",
+                        "schema": {
+                            "$ref": "#/definitions/handler.responseLogin"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "description": "creaar un usuario",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "SignUp",
+                "operationId": "create-account",
+                "parameters": [
+                    {
+                        "description": "credentials",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.RegisterUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "uuid",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int",
+                            "example": 1
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/roles": {
             "get": {
                 "security": [
@@ -268,124 +388,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/login": {
-            "post": {
-                "description": "login",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "auth"
-                ],
-                "summary": "SignIn",
-                "operationId": "login",
-                "parameters": [
-                    {
-                        "description": "credentials",
-                        "name": "input",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/handler.signInInput"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "token",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handler.errorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handler.errorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/handler.errorResponse"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/handler.errorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/register": {
-            "post": {
-                "description": "creaar un usuario",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "auth"
-                ],
-                "summary": "SignUp",
-                "operationId": "create-account",
-                "parameters": [
-                    {
-                        "description": "account info",
-                        "name": "input",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dona.User"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handler.errorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handler.errorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/handler.errorResponse"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/handler.errorResponse"
-                        }
-                    }
-                }
-            }
-        }
     },
     "definitions": {
         "handler.errorResponse": {
@@ -410,15 +412,47 @@ const docTemplate = `{
         "handler.signInInput": {
             "type": "object",
             "required": [
-                "password",
-                "email"
+                "email",
+                "password"
             ],
             "properties": {
-                "password": {
-                    "type": "string"
-                },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "email",
+                    "example": "iG9Xz@example.com"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "password o contraseña",
+                    "example": "123456"
+                }
+            }
+        },
+        "handler.responseLogin": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                }
+                "email": {
+                    "type": "string",
+                    "description": "email",
+                    "example": "iG9Xz@example.com"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Nombre del Usuario",
+                    "example": "Juan Pérez Vasques"
+                },
+                avatar_user": {
+                    "type": "string",
+                    "description": "Avatar del Usuario",
+                    "example": "en formato base64"
+                },
+                "token": {
+                    "type": "string",
+                    "example": "v2.local.ARvmK2l3WgzRcy6R0OuAOVEyidd9sMLOUSRV2iIqXigugg6mlsF9mnCCAI8UXnkiPf5KbIQCI06XuRTn2FTuTfqNuEd_eazQD7W6mJeRWb0bfrRsokYjtEpVckcdPNfOG87xoaxV-DU4LN4hfV4rB1DmUNYWBqZ379bLSdoxK0TAyhvWKAF9G5jKQQOQFTjgyNaEgJ03J6dNmwOfuKdDZ5o2kLwgSm1U-2WI2P1g0ge-X4Kg7jnq4vfbwQxpltZUxvQ5d_TFsApJ5ONf_L6gerA.bnVsbA"
                 }
             }
         },
@@ -440,36 +474,37 @@ const docTemplate = `{
                 }
             }
         },
-        "models.User": {
+        "handler.RegisterUser": {
             "type": "object",
             "required": [
                 "first_last_name",
                 "email",
                 "password",
-                "avatar_user",
-                "is_admin",
-                "fk_role",
+                "avatar_user"
             ],
             "properties": {
                 "first_last_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Juan Pérez Vasques",
+                    "description": "Nombre completo del usuario"
                 },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "iG9Xz@example.com",
+                    "description": "Email del usuario"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "123456",
+                    "description": "Contraseña del usuario"
                 },
                 "avatar_user": {
-                    "type": "string"
-                },
-                
-                "is_admin": {
-                    "type": "boolean"
-                },
-                "fk_role": {
-                    "type": "integer"
+                    "type": "string",
+                    "example": "base64",
+                    "description": "Avatar del usuario"
                 }
+                
+                
             }
         }
     },
@@ -488,8 +523,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "App Almacen Inventary",
-	Description:      "API Server el registro de stops",
+	Title:            "App Recaudación de Impuestos",
+	Description:      "API Server el registro de recaudación de impuestos",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }
