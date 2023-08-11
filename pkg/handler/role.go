@@ -10,6 +10,17 @@ import (
 	"github.com/ovasquezbrito/tax-collection/pkg/models"
 )
 
+// CreateRole godoc
+// @Summary 			Create role
+// @Description 	Register un role for user
+// @Tags 					roles
+// @Accept 				json
+// @Produce 			json
+// @Param 				input body dtos.Role true "role info"
+// @Success 			200 {object} dtos.Response
+// @Failure 			400,404 {object} errorResponse
+// @Failure 			500 {object} errorResponse
+// @Router 				api/roles/new [post]
 func (h *Handler) createRole(c *gin.Context) {
 	var input dtos.Role
 
@@ -29,12 +40,27 @@ func (h *Handler) createRole(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"id_uuid": id,
-	})
+	webResponse := dtos.Response{
+		Code:   http.StatusOK,
+		Status: "Ok",
+		Data:   id,
+	}
+
+	c.JSON(http.StatusOK, webResponse)
 
 }
 
+// CreateRole godoc
+// @Summary 			Get all role
+// @Description 	Return list of roles
+// @Tags 					roles
+// @Accept 				json
+// @Produce 			json
+// @Param 				input body dtos.Role true "role info"
+// @Success 			200 {object} dtos.Response
+// @Failure 			400,404 {object} errorResponse
+// @Failure 			500 {object} errorResponse
+// @Router 				api/roles/new [post]
 func (h *Handler) getAllRoles(c *gin.Context) {
 	_, err := getUserId(c)
 

@@ -7,6 +7,8 @@ import (
 	"os/signal"
 	"syscall"
 
+	_ "github.com/ovasquezbrito/tax-collection/docs"
+
 	_ "github.com/jackc/pgx/v5"
 	"github.com/sirupsen/logrus"
 
@@ -18,17 +20,12 @@ import (
 	"github.com/ovasquezbrito/tax-collection/util"
 )
 
-// @title App Base
+// @title Tag Service API
 // @version 1.0
-// @description API Server App-Base
+// @description A tag service API in Go using Gin framework.
 
 // @host localhost:8080
 // @BasePath /
-
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Authorization
-
 func main() {
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 	config, err := util.LoadConfig(".")

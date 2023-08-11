@@ -9,19 +9,17 @@ import (
 	"github.com/ovasquezbrito/tax-collection/pkg/models"
 )
 
-// @Summary SignUp
-// @Tags auth
-// @Description create account
-// @ID create-account
-// @Accept  json
-// @Produce  json
-// @Param input body dona.User true "account info"
-// @Success 200 {integer} integer 1
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
-// @Router /auth/sign-up [post]
-
+// CreateAccount godoc
+// @Summary 			Create account
+// @Description 	Register account in the system
+// @Tags 					auth
+// @Accept 				json
+// @Produce 			json
+// @Param 				input body dtos.RegisterUser true "account info"
+// @Success 			200 {object} dtos.Response
+// @Failure 			400,404 {object} errorResponse
+// @Failure 			500 {object} errorResponse
+// @Router 				/auth/register [post]
 func (h *Handler) register(c *gin.Context) {
 	var input dtos.RegisterUser
 
@@ -42,12 +40,25 @@ func (h *Handler) register(c *gin.Context) {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"uuid": id,
-	})
+	webResponse := dtos.Response{
+		Code:   http.StatusOK,
+		Status: "Ok",
+		Data:   id,
+	}
+	c.JSON(http.StatusOK, webResponse)
 }
 
+// Login godoc
+// @Summary 			Login
+// @Description 	Login account
+// @Tags 					auth
+// @Accept 				json
+// @Produce 			json
+// @Param 				input body dtos.LoginUser true "account info"
+// @Success 			200 {object} dtos.Response
+// @Failure 			400,404 {object} errorResponse
+// @Failure 			500 {object} errorResponse
+// @Router 				/auth/login [post]
 func (h *Handler) login(c *gin.Context) {
 	var input dtos.LoginUser
 
@@ -61,13 +72,19 @@ func (h *Handler) login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, dtos.UserResponse{
-		ID:         data.UserLogin.Id,
-		Email:      data.UserLogin.Email,
-		Name:       data.UserLogin.FirstLast,
-		AvatarUser: data.UserLogin.AvatarUser,
-		Token:      data.AccessToken,
-	})
+	webResponse := dtos.Response{
+		Code:   http.StatusOK,
+		Status: "Ok",
+		Data: dtos.UserResponse{
+			ID:         data.UserLogin.Id,
+			Email:      data.UserLogin.Email,
+			Name:       data.UserLogin.FirstLast,
+			AvatarUser: data.UserLogin.AvatarUser,
+			Token:      data.AccessToken,
+		},
+	}
+
+	c.JSON(http.StatusOK, webResponse)
 
 }
 

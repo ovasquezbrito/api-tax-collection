@@ -10,8 +10,6 @@ import (
 
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-
-	_ "github.com/ovasquezbrito/tax-collection/docs"
 )
 
 type Handler struct {
@@ -37,11 +35,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		},
 		MaxAge: 12 * time.Hour,
 	}))
-
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler,
-		ginSwagger.URL("http://localhost:8080/swagger/doc.json"),
-		ginSwagger.DefaultModelsExpandDepth(-1)),
-	)
+	// add swagger
+	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	auth := router.Group("/auth")
 	{
