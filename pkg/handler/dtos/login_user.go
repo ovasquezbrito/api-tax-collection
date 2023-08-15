@@ -1,8 +1,8 @@
 package dtos
 
 type LoginUser struct {
-	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required"`
+	Email    string `json:"email" validate:"required,email" swaggertype:"string" format:"string" example:"admin@gmail.com"`
+	Password string `json:"password" validate:"required" swaggertype:"string" format:"string" example:"1234567890"`
 }
 
 type UserResponse struct {

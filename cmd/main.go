@@ -24,6 +24,10 @@ import (
 // @version 1.0
 // @description A tag service API in Go using Gin framework.
 
+// @securityDefinitions.apikey ApiKeyAuth
+// @in                         header
+// @name                       Authorization
+
 // @host localhost:8080
 // @BasePath /
 func main() {

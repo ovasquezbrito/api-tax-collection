@@ -11,18 +11,19 @@ import (
 )
 
 // CreateRole godoc
-// @Summary 			Create role
+// @Summary 		Create role
 // @Description 	Register un role for user
-// @Tags 					roles
-// @Accept 				json
-// @Produce 			json
-// @Param 				input body dtos.Role true "role info"
-// @Success 			200 {object} dtos.Response
-// @Failure 			400,404 {object} errorResponse
-// @Failure 			500 {object} errorResponse
-// @Router 				api/roles/new [post]
+// @Tags 			roles
+// @Accept 			json
+// @Produce 		json
+// @Security 		ApiKeyAuth
+// @Param 			input body dtos.RoleInput true "role info"
+// @Success 		200 {object} dtos.Response
+// @Failure 		400,404 {object} errorResponse
+// @Failure 		500 {object} errorResponse
+// @Router 			/api/roles/new [post]
 func (h *Handler) createRole(c *gin.Context) {
-	var input dtos.Role
+	var input dtos.RoleInput
 
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
@@ -53,14 +54,14 @@ func (h *Handler) createRole(c *gin.Context) {
 // CreateRole godoc
 // @Summary 			Get all role
 // @Description 	Return list of roles
+// @Security 		ApiKeyAuth
 // @Tags 					roles
 // @Accept 				json
 // @Produce 			json
-// @Param 				input body dtos.Role true "role info"
-// @Success 			200 {object} dtos.Response
+// @Success 			200 {array} dtos.GetAllRolesResponse
 // @Failure 			400,404 {object} errorResponse
 // @Failure 			500 {object} errorResponse
-// @Router 				api/roles/new [post]
+// @Router 				/api/roles [get]
 func (h *Handler) getAllRoles(c *gin.Context) {
 	_, err := getUserId(c)
 

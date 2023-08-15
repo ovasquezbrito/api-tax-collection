@@ -7,4 +7,4 @@ Instalar: go get -u github.com/swaggo/files
 Instalar: go get -u github.com/swaggo/gin-swagger
 generar documento: swag init -g cmd/main.go
 
-ejecutar API <http://localhost:8080/swagger/index.html>
+ejecutar API <http://localhost:8080/docs/index.html>

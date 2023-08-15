@@ -1,10 +1,23 @@
 basePath: /
 definitions:
+  dtos.GetAllRolesResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Role'
+        type: array
+      totalCount:
+        type: integer
+    type: object
   dtos.LoginUser:
     properties:
       email:
+        example: admin@gmail.com
+        format: string
         type: string
       password:
+        example: "1234567890"
+        format: string
         type: string
     required:
     - email
@@ -35,10 +48,40 @@ definitions:
       status:
         type: string
     type: object
+  dtos.RoleInput:
+    properties:
+      role_name:
+        example: admin
+        format: string
+        type: string
+      role_nivel:
+        example: 1
+        format: int
+        type: integer
+    required:
+    - role_name
+    type: object
   handler.errorResponse:
     properties:
       message:
         type: string
+    type: object
+  models.Role:
+    properties:
+      created_at:
+        type: string
+      id_role:
+        type: integer
+      role_name:
+        type: string
+      role_nivel:
+        type: integer
+      status:
+        type: boolean
+      updated_at:
+        type: string
+    required:
+    - role_name
     type: object
 host: localhost:8080
 info:
@@ -47,6 +90,73 @@ info:
   title: Tag Service API
   version: "1.0"
 paths:
+  /api/roles:
+    get:
+      consumes:
+      - application/json
+      description: Return list of roles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dtos.GetAllRolesResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all role
+      tags:
+      - roles
+  /api/roles/new:
+    post:
+      consumes:
+      - application/json
+      description: Register un role for user
+      parameters:
+      - description: role info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.RoleInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dtos.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create role
+      tags:
+      - roles
   /auth/login:
     post:
       consumes:
@@ -115,4 +225,9 @@ paths:
       summary: Create account
       tags:
       - auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

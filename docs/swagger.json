@@ -9,6 +9,112 @@
     "host": "localhost:8080",
     "basePath": "/",
     "paths": {
+        "/api/roles": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Return list of roles",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "roles"
+                ],
+                "summary": "Get all role",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dtos.GetAllRolesResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/roles/new": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Register un role for user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "roles"
+                ],
+                "summary": "Create role",
+                "parameters": [
+                    {
+                        "description": "role info",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dtos.RoleInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/login": {
             "post": {
                 "description": "Login account",
@@ -115,6 +221,20 @@
         }
     },
     "definitions": {
+        "dtos.GetAllRolesResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Role"
+                    }
+                },
+                "totalCount": {
+                    "type": "integer"
+                }
+            }
+        },
         "dtos.LoginUser": {
             "type": "object",
             "required": [
@@ -123,10 +243,14 @@
             ],
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "string",
+                    "example": "admin@gmail.com"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "string",
+                    "example": "1234567890"
                 }
             }
         },
@@ -166,6 +290,24 @@
                 }
             }
         },
+        "dtos.RoleInput": {
+            "type": "object",
+            "required": [
+                "role_name"
+            ],
+            "properties": {
+                "role_name": {
+                    "type": "string",
+                    "format": "string",
+                    "example": "admin"
+                },
+                "role_nivel": {
+                    "type": "integer",
+                    "format": "int",
+                    "example": 1
+                }
+            }
+        },
         "handler.errorResponse": {
             "type": "object",
             "properties": {
@@ -173,6 +315,39 @@
                     "type": "string"
                 }
             }
+        },
+        "models.Role": {
+            "type": "object",
+            "required": [
+                "role_name"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id_role": {
+                    "type": "integer"
+                },
+                "role_name": {
+                    "type": "string"
+                },
+                "role_nivel": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "boolean"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

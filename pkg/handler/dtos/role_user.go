@@ -14,6 +14,11 @@ type Role struct {
 	Status    bool      `json:"status"`
 }
 
+type RoleInput struct {
+	RoleName  string `json:"role_name" binding:"required" swaggertype:"string" format:"string" example:"admin"`
+	RoleNivel int    `json:"role_nivel" swaggertype:"integer" format:"int" example:"1"`
+}
+
 type RoleUser struct {
 	NameOpcion   string    `json:"name_opcion" binding:"required"`
 	Icon         string    `json:"icon" binding:"required"`
