@@ -90,11 +90,24 @@ info:
   title: Tag Service API
   version: "1.0"
 paths:
-  /api/roles:
+  /api/roles/:
     get:
       consumes:
       - application/json
       description: Return list of roles
+      parameters:
+      - description: page
+        in: query
+        name: _page
+        type: integer
+      - description: limit
+        in: query
+        name: _limit
+        type: integer
+      - description: search
+        in: query
+        name: name_like
+        type: string
       produces:
       - application/json
       responses:
@@ -117,8 +130,43 @@ paths:
           schema:
             $ref: '#/definitions/handler.errorResponse'
       security:
-      - ApiKeyAuth: []
+      - Bearer: []
       summary: Get all role
+      tags:
+      - roles
+  /api/roles/{id}/show:
+    get:
+      consumes:
+      - application/json
+      description: Return a role
+      parameters:
+      - description: role id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dtos.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - Bearer: []
+      summary: Get a role
       tags:
       - roles
   /api/roles/new:
@@ -153,7 +201,7 @@ paths:
           schema:
             $ref: '#/definitions/handler.errorResponse'
       security:
-      - ApiKeyAuth: []
+      - Bearer: []
       summary: Create role
       tags:
       - roles
@@ -226,7 +274,7 @@ paths:
       tags:
       - auth
 securityDefinitions:
-  ApiKeyAuth:
+  Bearer:
     in: header
     name: Authorization
     type: apiKey

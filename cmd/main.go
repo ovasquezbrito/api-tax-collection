@@ -24,7 +24,7 @@ import (
 // @version 1.0
 // @description A tag service API in Go using Gin framework.
 
-// @securityDefinitions.apikey ApiKeyAuth
+// @securityDefinitions.apikey Bearer
 // @in                         header
 // @name                       Authorization
 

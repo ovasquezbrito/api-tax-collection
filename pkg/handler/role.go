@@ -16,7 +16,7 @@ import (
 // @Tags 			roles
 // @Accept 			json
 // @Produce 		json
-// @Security 		ApiKeyAuth
+// @Security 		Bearer
 // @Param 			input body dtos.RoleInput true "role info"
 // @Success 		200 {object} dtos.Response
 // @Failure 		400,404 {object} errorResponse
@@ -53,15 +53,18 @@ func (h *Handler) createRole(c *gin.Context) {
 
 // CreateRole godoc
 // @Summary 			Get all role
-// @Description 	Return list of roles
-// @Security 		ApiKeyAuth
-// @Tags 					roles
+// @Description 		Return list of roles
+// @Security 			Bearer
+// @Tags 				roles
 // @Accept 				json
 // @Produce 			json
 // @Success 			200 {array} dtos.GetAllRolesResponse
 // @Failure 			400,404 {object} errorResponse
 // @Failure 			500 {object} errorResponse
-// @Router 				/api/roles [get]
+// @Param 				_page query int false "page"
+// @Param 				_limit query int false "limit"
+// @Param 				name_like query string false "search"
+// @Router 				/api/roles/ [get]
 func (h *Handler) getAllRoles(c *gin.Context) {
 	_, err := getUserId(c)
 
@@ -87,6 +90,18 @@ func (h *Handler) getAllRoles(c *gin.Context) {
 	})
 }
 
+// CreateRole godoc
+// @Summary 			Get a role
+// @Description 		Return a role
+// @Security 			Bearer
+// @Tags 				roles
+// @Accept 				json
+// @Produce 			json
+// @Success 			200 {object} dtos.Response
+// @Failure 			400,404 {object} errorResponse
+// @Failure 			500 {object} errorResponse
+// @Param 				id path int true "role id"
+// @Router 				/api/roles/{id}/show [get]
 func (h *Handler) getRoleById(c *gin.Context) {
 	_, err := getUserId(c)
 
@@ -106,11 +121,27 @@ func (h *Handler) getRoleById(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"data": item,
-	})
+	webResponse := dtos.Response{
+		Code:   http.StatusOK,
+		Status: "Ok",
+		Data:   item,
+	}
+
+	c.JSON(http.StatusOK, webResponse)
 }
 
+// CreateRole godoc
+// @Summary 			Delete a role
+// @Description 		Delete a role
+// @Security 			Bearer
+// @Tags 				roles
+// @Accept 				json
+// @Produce 			json
+// @Success 			200 {object} dtos.Response
+// @Failure 			400,404 {object} errorResponse
+// @Failure 			500 {object} errorResponse
+// @Param 				id path int true "role id"
+// @Router 				/api/roles/{id}/delete [get]
 func (h *Handler) deleteRoleById(c *gin.Context) {
 	_, err := getUserId(c)
 
