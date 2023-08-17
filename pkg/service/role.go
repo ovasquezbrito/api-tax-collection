@@ -90,5 +90,8 @@ func (s *RolesService) DeleteById(ctx context.Context, idRol int) (int64, error)
 	if err != nil {
 		return 0, err
 	}
+	if r == 0 {
+		return 0, errors.New("no existe un registro para eliminar")
+	}
 	return r, nil
 }

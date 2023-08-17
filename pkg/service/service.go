@@ -28,7 +28,7 @@ type RoleService interface {
 
 type UsersServices interface {
 	GetAll(ctx context.Context, query models.QueryParameter) ([]models.UserResponse, int, error)
-	AddRoleToUser(ctx context.Context, userRole models.AsociateRoleToUser) error
+	AddRoleToUser(ctx context.Context, userRole models.AsociateRoleToUser) (int64, error)
 }
 
 type Service struct {

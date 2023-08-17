@@ -50,7 +50,7 @@ func (h *Handler) register(c *gin.Context) {
 
 // Login godoc
 // @Summary 			Login
-// @Description 	Login account
+// @Description 	Login account Bearer {token} Example: Bearer Abc123
 // @Tags 					auth
 // @Accept 				json
 // @Produce 			json

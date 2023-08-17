@@ -39,6 +39,6 @@ type LoginUserResponse struct {
 }
 
 type AsociateRoleToUser struct {
-	IdUser int `json:"id_user"`
-	IdRole int `json:"id_role"`
+	IdUser int `json:"id_user" swaggertype:"integer" format:"int" example:"1"`
+	IdRole int `json:"id_role" swaggertype:"integer" format:"int" example:"1"`
 }

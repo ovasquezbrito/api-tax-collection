@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -17,7 +18,7 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param input body dona.User true "account info"
-// @Success 200 {integer} integer 1
+// @Success 200 {object} dtos.Response
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
@@ -44,11 +45,29 @@ func (h *Handler) createUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"uuid": id,
-	})
+	webResponse := dtos.Response{
+		Code:   http.StatusOK,
+		Status: "Ok",
+		Data:   id,
+	}
+
+	c.JSON(http.StatusOK, webResponse)
 }
 
+// CreateRole godoc
+// @Summary 			Get all users
+// @Description 		Return list of users
+// @Security 			Bearer
+// @Tags 				usuarios
+// @Accept 				json
+// @Produce 			json
+// @Success 			200 {array} dtos.GetAllUsersResponse
+// @Failure 			400,404 {object} errorResponse
+// @Failure 			500 {object} errorResponse
+// @Param 				_page query int false "integer default" default(1)
+// @Param 				_limit query int false "integer default" default(10)
+// @Param 				name_like query string false "search"
+// @Router 				/api/user/ [get]
 func (h *Handler) getAllUsers(c *gin.Context) {
 	_, err := getUserId(c)
 
@@ -62,18 +81,30 @@ func (h *Handler) getAllUsers(c *gin.Context) {
 		return
 	}
 
-	lists, total, err := h.services.RoleService.GetAll(c, query)
+	lists, total, err := h.services.UsersServices.GetAll(c, query)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, dtos.GetAllRolesResponse{
+	c.JSON(http.StatusOK, dtos.GetAllUsersResponse{
 		Data:  lists,
 		Total: total,
 	})
 }
 
+// CreateRole godoc
+// @Summary 			Get a user
+// @Description 		Return a user
+// @Security 			Bearer
+// @Tags 				usuarios
+// @Accept 				json
+// @Produce 			json
+// @Success 			200 {object} dtos.Response
+// @Failure 			400,404 {object} errorResponse
+// @Failure 			500 {object} errorResponse
+// @Param 				id path int true "role id"
+// @Router 				/api/user/{id}/show [get]
 func (h *Handler) getUserById(c *gin.Context) {
 	_, err := getUserId(c)
 
@@ -87,17 +118,33 @@ func (h *Handler) getUserById(c *gin.Context) {
 		return
 	}
 
-	item, err := h.services.RoleService.GetById(c, id)
+	item, err := h.services.Authorization.GetUserById(c, id)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"data": item,
-	})
+	webResponse := dtos.Response{
+		Code:   http.StatusOK,
+		Status: "Ok",
+		Data:   item,
+	}
+
+	c.JSON(http.StatusOK, webResponse)
 }
 
+// CreateAccount godoc
+// @Summary 			Asociate role to account
+// @Description 		Asociate role to account
+// @Security 			Bearer
+// @Tags 					usuarios
+// @Accept 				json
+// @Produce 			json
+// @Param 				input body models.AsociateRoleToUser true "asociate account"
+// @Success 			200 {object} dtos.Response
+// @Failure 			400,404 {object} errorResponse
+// @Failure 			500 {object} errorResponse
+// @Router 				/api/user/associaterole [post]
 func (h *Handler) associateRoleToUser(c *gin.Context) {
 	var input models.AsociateRoleToUser
 
@@ -106,13 +153,19 @@ func (h *Handler) associateRoleToUser(c *gin.Context) {
 		return
 	}
 
-	err := h.services.UsersServices.AddRoleToUser(c, input)
+	af, err := h.services.UsersServices.AddRoleToUser(c, input)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"code": http.StatusOK,
-	})
+	messageDelete := fmt.Sprintf("%d RowsAffected", af)
+
+	webResponse := dtos.Response{
+		Code:   http.StatusNoContent,
+		Status: "Ok",
+		Data:   messageDelete,
+	}
+
+	c.JSON(http.StatusOK, webResponse)
 }

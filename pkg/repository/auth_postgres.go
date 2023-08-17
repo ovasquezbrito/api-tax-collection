@@ -100,7 +100,8 @@ func (r *AuthPostgres) GetUserById(ctx context.Context, idUser int) (*entity.Use
 	query := fmt.Sprintf(
 		`
 			SELECT us.id, us.first_last_name, us.email, us.avatar_user, us.status, us.isadmin, 
-			us.fk_role, us.created_at, us.updated_at
+			case when us.fk_role is null then 0 else us.fk_role end as fk_role,
+			 us.created_at, us.updated_at
      	FROM %s AS us
      	WHERE us.id = $1
 		`,

@@ -23,24 +23,24 @@ func NewUsersService(
 	return &UsersService{repo: repo, repo2: repo2, repo3: repo3}
 }
 
-func (s *UsersService) AddRoleToUser(ctx context.Context, userRole models.AsociateRoleToUser) error {
+func (s *UsersService) AddRoleToUser(ctx context.Context, userRole models.AsociateRoleToUser) (int64, error) {
 	idUser := userRole.IdUser
 	idRole := userRole.IdRole
 	_, err := s.repo2.GetUserById(ctx, idUser)
 	if err != nil {
-		return errors.New("user no existe")
+		return 0, errors.New("user no existe")
 	}
 
 	_, err = s.repo3.GetById(ctx, idRole)
 	if err != nil {
-		return errors.New("rol no existe")
+		return 0, errors.New("rol no existe")
 	}
 
-	err = s.repo.AddRoleToUser(ctx, idUser, idRole)
+	af, err := s.repo.AddRoleToUser(ctx, idUser, idRole)
 	if err != nil {
-		return err
+		return 0, err
 	}
-	return nil
+	return af, nil
 }
 
 func (s *UsersService) GetAll(ctx context.Context, query models.QueryParameter) ([]models.UserResponse, int, error) {

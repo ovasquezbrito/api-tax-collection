@@ -17,8 +17,9 @@ func NewUserPostgres(db *sqlx.DB) *UserPostgres {
 	return &UserPostgres{db: db}
 }
 
-func (r *UserPostgres) AddRoleToUser(ctx context.Context, idRole, idUser int) error {
+func (r *UserPostgres) AddRoleToUser(ctx context.Context, idRole, idUser int) (int64, error) {
 
+	var af int64
 	query := fmt.Sprintf(
 		`
 			UPDATE %s SET fk_role = $1 WHERE id = $2 
@@ -26,12 +27,17 @@ func (r *UserPostgres) AddRoleToUser(ctx context.Context, idRole, idUser int) er
 		usersTable,
 	)
 
-	_, err := r.db.ExecContext(ctx, query, idRole, idUser)
+	row, err := r.db.ExecContext(ctx, query, idRole, idUser)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	return nil
+	af, err = row.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
+
+	return af, nil
 }
 
 func (r *UserPostgres) GetAll(ctx context.Context, filter entity.QueryParameter) ([]entity.UserResponse, int, error) {
@@ -43,7 +49,8 @@ func (r *UserPostgres) GetAll(ctx context.Context, filter entity.QueryParameter)
 
 	sqlQuery := fmt.Sprintf(
 		`
-			SELECT u.id, u.first_last_name,	u.email, u.avatar_user, u.status, u.isadmin, u.fk_role,
+			SELECT u.id, u.first_last_name,	u.email, u.avatar_user, u.status, u.isadmin, 
+			case when u.fk_role is null then 0 else u.fk_role end as fk_role,
 			u.created_at, u.updated_at
 				FROM %s as u
 				WHERE u.first_last_name like %s

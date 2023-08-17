@@ -78,6 +78,8 @@ func (r *RolePostgres) GetRoleByName(ctx context.Context, rolName string) (*enti
 		return item, errors.New("error al realizar la consulta")
 	}
 
+	fmt.Println(item)
+
 	return item, nil
 }
 

@@ -61,8 +61,8 @@ func (h *Handler) createRole(c *gin.Context) {
 // @Success 			200 {array} dtos.GetAllRolesResponse
 // @Failure 			400,404 {object} errorResponse
 // @Failure 			500 {object} errorResponse
-// @Param 				_page query int false "page"
-// @Param 				_limit query int false "limit"
+// @Param 				_page query int false "integer default" default(1)
+// @Param 				_limit query int false "integer default" default(10)"
 // @Param 				name_like query string false "search"
 // @Router 				/api/roles/ [get]
 func (h *Handler) getAllRoles(c *gin.Context) {
@@ -137,11 +137,11 @@ func (h *Handler) getRoleById(c *gin.Context) {
 // @Tags 				roles
 // @Accept 				json
 // @Produce 			json
-// @Success 			200 {object} dtos.Response
+// @Success 			204 {object} dtos.Response
 // @Failure 			400,404 {object} errorResponse
 // @Failure 			500 {object} errorResponse
 // @Param 				id path int true "role id"
-// @Router 				/api/roles/{id}/delete [get]
+// @Router 				/api/roles/{id}/delete [delete]
 func (h *Handler) deleteRoleById(c *gin.Context) {
 	_, err := getUserId(c)
 
@@ -160,10 +160,14 @@ func (h *Handler) deleteRoleById(c *gin.Context) {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
+
 	messageDelete := fmt.Sprintf("%d RowsAffected", item)
 
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"code":    204,
-		"message": messageDelete,
-	})
+	webResponse := dtos.Response{
+		Code:   http.StatusNoContent,
+		Status: "Ok",
+		Data:   messageDelete,
+	}
+
+	c.JSON(http.StatusOK, webResponse)
 }
