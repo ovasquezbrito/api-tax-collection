@@ -66,6 +66,7 @@ func (s *UsersService) GetAll(ctx context.Context, query models.QueryParameter) 
 			AvatarUser: u.AvatarUser,
 			Status:     u.Status,
 			IsAdmin:    u.IsAdmin,
+			FkRole:     u.FkRole,
 		})
 	}
 
